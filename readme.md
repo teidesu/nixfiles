@@ -4,15 +4,6 @@ ok hi this is my nixos config. i use it only for my home server (for now).
 
 the config is pretty much a mess and the code sucks.
 
-## code style
-a few rules i came up with for myself to avoid blackbox magic:
-- no indirect imports using `readDir` or whatever
-- no custom overlays - any custom utils are explicitly imported. 
-  the only exception - globally available `abs` (in `specialArgs`) for absolute paths.
-- no custom options - only options defined in [nixos search](https://search.nixos.org/options?channel=23.05) can be used.
-
-there isn't much other than that, im just starting out.
-
 ## impure dependencies
 note to self on what needs to be installed on the host manually:
 
