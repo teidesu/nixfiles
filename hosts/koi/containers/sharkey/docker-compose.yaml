@@ -58,7 +58,7 @@ services:
     networks:
       - calcnet
     volumes:
-      - /mnt/puffer/Sharkey/meili_data:/meili_data
+      - /srv/Sharkey/meili_data:/meili_data
 
 networks:
   calcnet: {}
