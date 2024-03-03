@@ -21,11 +21,12 @@
   mount = config: name:
     let
       path = config.age.secrets.${name}.path;
+      localPath = "/mnt/secrets/${name}";
     in
     {
-      path = path;
+      path = localPath;
       mounts = {
-        ${path} = {
+        ${localPath} = {
           hostPath = path;
           isReadOnly = true;
         };

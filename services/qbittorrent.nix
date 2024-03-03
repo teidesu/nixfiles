@@ -70,7 +70,7 @@ in
 
       mkdir -p ${dataDir}/qBittorrent/config
       cp ${iniFile} ${dataDir}/qBittorrent/config/qBittorrent.conf
-      ${setup}
+      ${setup { inherit dataDir; config = "${dataDir}/qBittorrent/config/qBittorrent.conf"; }}
       ${package}/bin/qbittorrent-nox --webui-port=${toString port} --profile=${dataDir}
     '';
   };

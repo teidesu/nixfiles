@@ -1,13 +1,19 @@
-{ abs, lib, pkgs, ... }@inputs:
+{ abs, lib, pkgs, config, ... }@inputs:
 let
   containers = (import (abs "lib/containers.nix") inputs);
+  secrets = import (abs "lib/secrets.nix");
   vueTorrent = pkgs.fetchurl {
     url = "https://github.com/WDaan/VueTorrent/releases/download/v2.4.0/vuetorrent.zip";
     hash = "sha256-ZM2AAJVqlzCXxvWnWhYDVBXZqpe0NzkFfYLvUTyzlZM=";
   };
+
+  dlWebhook = secrets.mount config "qbt-dl-webhook";
 in
 {
   imports = [
+    (secrets.declare [
+      { name = "qbt-dl-webhook"; mode = "777"; }
+    ])
     (containers.mkNixosContainer {
       name = "torrent";
       ephemeral = false;
@@ -23,8 +29,10 @@ in
             serviceConfig = {
               AmbientCapabilities = "CAP_NET_BIND_SERVICE";
             };
-            setup = ''
+            setup = { config, ... }: ''
               mkdir -p /var/lib/qbittorrent/temp
+              dl_webhook=`cat ${dlWebhook.path}`
+              sed -i "s|%DL_WEBHOOK%|$dl_webhook|g" ${config}
             '';
             config = {
               Preferences = {
@@ -45,6 +53,10 @@ in
                 "Proxy\\Type" = "SOCKS5";
                 "Proxy\\HostnameLookupEnabled" = "true";
               };
+              AutoRun = {
+                enabled = "true";
+                program = "curl \\\"%DL_WEBHOOK%\\\" -X POST -d \\\"%N\\\"";
+              };
             };
           })
         ];
@@ -56,7 +68,7 @@ in
           hostPath = "/mnt/puffer/Downloads";
           isReadOnly = false;
         };
-      };
+      } // (dlWebhook.mounts);
     })
   ];
 
