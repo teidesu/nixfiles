@@ -1,0 +1,11 @@
+--- packages/backend/built/server/NodeinfoServerService.js
++++ packages/backend/built/server/NodeinfoServerService.js
+@@ -73,7 +73,7 @@
+             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             const document = {
+                 software: {
+-                    name: 'sharkey',
++                    name: 'fishkey',
+                     version: this.config.version,
+                     homepage: nodeinfo_homepage,
+                     repository: meta.repositoryUrl

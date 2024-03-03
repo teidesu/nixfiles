@@ -31,12 +31,14 @@ clusterLimit: 2
 
 maxNoteLength: 30000
 
+proxy: 'http://10.42.0.2:7891'
 proxyBypassHosts:
   - api.deepl.com
   - api-free.deepl.com
   - www.recaptcha.net
   - hcaptcha.com
   - challenges.cloudflare.com
+  - tei.su
 
 # Media Proxy
 # Reference Implementation: https://github.com/misskey-dev/media-proxy
@@ -46,7 +48,7 @@ proxyBypassHosts:
 
 # Proxy remote files (default: true)
 # Proxy remote files by this instance or mediaProxy to prevent remote files from running in remote domains.
-proxyRemoteFiles: false
+proxyRemoteFiles: true
 
 # Movie Thumbnail Generation URL
 # There is no reference implementation.
@@ -66,7 +68,7 @@ checkActivityPubGetSignature: false
 #  '127.0.0.1/32'
 #]
 
-#customMOTD: ['Hello World', 'The sharks rule all', 'Shonks']
+customMOTD: ['meow']
 
 # Upload or download file size limits (bytes)
 maxFileSize: 262144000
