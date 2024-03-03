@@ -7,7 +7,7 @@
 {
   imports = [
     (abs "hosts/nixos-common.nix")
-    (abs "users/teidesu/default.nix")
+    (abs "users/teidesu/server.nix")
     ./hardware-configuration.nix
 
     ./partials/fde.nix

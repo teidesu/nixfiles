@@ -36,6 +36,9 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -45,26 +48,39 @@
     , agenix
     , bootspec-secureboot
     , home-manager
+    , nix-darwin
     , ...
     }:
     let
-      makeNixosSystem = obj: nixpkgs.lib.nixosSystem (obj // {
-        specialArgs = (obj.specialArgs or { }) // {
-          inherit inputs;
-          abs = path: ./. + ("/" + path);
-        };
-      });
+      specialArgs = {
+        inherit inputs;
+        abs = path: ./. + ("/" + path);
+      };
     in
     {
       nixosConfigurations = {
-        koi = makeNixosSystem {
+        koi = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
             agenix.nixosModules.default
             bootspec-secureboot.nixosModules.bootspec-secureboot
             home-manager.nixosModules.home-manager
+            { home-manager.extraSpecialArgs = specialArgs; }
             ./hosts/koi/configuration.nix
           ];
+          inherit specialArgs;
+        };
+      };
+
+      darwinConfigurations = {
+        teidesu-osx = nix-darwin.lib.darwinSystem {
+          modules = [
+            agenix.darwinModules.default
+            home-manager.darwinModules.home-manager
+            { home-manager.extraSpecialArgs = specialArgs; }
+            ./hosts/teidesu-osx/configuration.nix
+          ];
+          inherit specialArgs;
         };
       };
     };

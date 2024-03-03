@@ -1,4 +1,4 @@
-{ abs, pkgs, inputs, ... }:
+{ abs, pkgs, lib, inputs, ... }:
 
 {
   users.users.teidesu = {
@@ -13,20 +13,10 @@
 
   home-manager.users.teidesu = { pkgs, ... }: {
     imports = [
+      ./common.nix
       inputs.vscode-server.homeModules.default
-      ./zsh.nix
     ];
 
-	services.vscode-server.enable = true;
-    home.stateVersion = "23.11";
-
-    home.packages = with pkgs; [
-      tree
-      nixpkgs-fmt
-      htop
-      jq
-      inputs.nil.packages.${system}.default
-      inputs.agenix.packages.${system}.default
-    ];
+    services.vscode-server.enable = true;
   };
 }

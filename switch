@@ -23,4 +23,12 @@ if [ "$1" == "boot" ]; then
     shift
 fi
 
-sudo nixos-rebuild $cmd --flake . $args $@
+if [ "$(uname)" == "Darwin" ]; then
+    if command -v darwin-rebuild &> /dev/null; then
+        darwin-rebuild switch --flake . $args $@
+    else
+        nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake . $args $@
+    fi
+else
+    sudo nixos-rebuild $cmd --flake . $args $@
+fi

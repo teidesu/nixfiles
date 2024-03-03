@@ -143,6 +143,26 @@
         "type": "github"
       }
     },
+    "nix-darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1709348262,
+        "narHash": "sha256-eYTA1uZtYGFKrDOKiAz1wlE6aIC9WSdBNF8bSS818zM=",
+        "owner": "LnL7",
+        "repo": "nix-darwin",
+        "rev": "8a15cb36fffa0b5fbe31ef16ede0a479bef4b365",
+        "type": "github"
+      },
+      "original": {
+        "owner": "LnL7",
+        "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1704194953,
@@ -179,6 +199,7 @@
         "bootspec-secureboot": "bootspec-secureboot",
         "home-manager": "home-manager_2",
         "nil": "nil",
+        "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
         "vscode-server": "vscode-server"
       }
