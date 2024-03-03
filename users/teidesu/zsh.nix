@@ -4,34 +4,33 @@ let
   starshipConfig = {
     # based on https://starship.rs/presets/pastel-powerline.html
     format = 
-      "$character" +
+      "[ алина 🌸](bg:#be15dc)[](#be15dc) " +
+      ''''${env_var._NIX_SHELL_INFO}'' +
+      "$nix_shell" +
       "$hostname" +
-      "[](fg:#be15dc bg:#FCA17D)" +
       "$git_branch" +
       "$git_status" +
-      "[](fg:#FCA17D bg:#86BBD8)" +
       "$nodejs" +
-      "[](fg:#86BBD8 bg:#33658A)" +
+      "\n" +
       "$directory" +
-      "[ ](fg:#33658A)" +
+      "$character" +
     "";
-    add_newline = false;
+    add_newline = true;
 
     character = {
-      success_symbol = "[](#be15dc)[ алина 🌸 ](bg:#be15dc)";
-      error_symbol = "[](#dc156b)[ алина 🌸 ](bg:#be15dc)";
-      format = "$symbol";
+      success_symbol = "[❱](#26dc15)";
+      error_symbol = "[❱](#dc156b)";
     };
 
     hostname = {
-      style = ''bg:#be15dc'';
-      format = "[$hostname ]($style)";
+      style = "bg:#a2d3f6 fg:black";
+      format = "[](#a2d3f6)[󰒋 $hostname]($style)[](#a2d3f6) ";
       ssh_only = true;
     };
 
     directory = {
-      style = "bg:#33658A";
-      format = "[ $path ]($style)";
+      style = "blue";
+      format = "[$path ]($style)";
       truncation_length = 3;
       truncation_symbol = "… /";
     };
@@ -39,22 +38,27 @@ let
     git_branch = {
       symbol = "";
       style = "bg:#FCA17D fg:black";
-      format = "[ $symbol $branch ]($style)";
+      format = "[](fg:#FCA17D)[$symbol $branch ]($style)";
     };
     git_status = {
       style = "bg:#FCA17D fg:black";
-      format = "[$all_status$ahead_behind ]($style)";
+      format = "[$all_status$ahead_behind]($style)[](fg:#FCA17D) ";
+    };
+
+    nix_shell = {
+      style = "bg:#8ab3db fg:black";
+      format = "[](#8ab3db)[  $name]($style)[](#8ab3db) ";
+    };
+
+    env_var._NIX_SHELL_INFO = {
+      style = "bg:#8ab3db fg:black";
+      format = "[](#8ab3db)[  $env_value]($style)[](#8ab3db) ";
     };
 
     nodejs = {
-      symbol = "";
-      style = "bg:#86BBD8 fg:black";
+      style = "bg:#a1d886 fg:black";
       version_format = "$major.$minor";
-      format = "[ $symbol ($version) ]($style)";
-    };
-
-    env_var._HOST_COLOR = {
-      format = "$env_value";
+      format = "[](#a1d886)[ $version]($style)[](#a1d886) ";
     };
   };
 in {
@@ -95,6 +99,22 @@ in {
       COMPLETION_WAITING_DOTS="true"
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5"
 
+      # search in history with up and down arrow 
+      autoload -U up-line-or-beginning-search
+      autoload -U down-line-or-beginning-search
+      zle -N up-line-or-beginning-search
+      zle -N down-line-or-beginning-search
+      bindkey "^[[A" up-line-or-beginning-search # Up
+      bindkey "^[[B" down-line-or-beginning-search # Down
+
+      WORDCHARS="*?_-.[]~=&;!#$%^"
+
+      # tab completion menu
+      autoload -Uz compinit
+      compinit
+      zstyle ':completion:*' menu select
+
+
       if command -v micro &> /dev/null; then
         export EDITOR="micro"
       elif command -v nano &> /dev/null; then
@@ -104,6 +124,22 @@ in {
       if command -v fnm &> /dev/null; then
         eval "$(fnm env)"
       fi
+
+      function ns {
+        newargs=()
+        for arg in $@; do
+          # if doesn't start with - and doesn't contain # - assume its a nixpkgs package
+          if [[ $arg != -* && $arg != *#* ]]; then
+            newargs+=("nixpkgs#$arg")
+          else
+            newargs+=($arg)
+          fi
+        done
+
+        _NIX_SHELL_INFO="''${newargs[@]}" nix shell "''${newargs[@]}"
+      }
+
+      export PATH="$HOME/.cargo/bin/:$PATH"
     '';
   };
 }

@@ -27,6 +27,8 @@
       watch
       curl
       android-tools
+      imagemagick
+      rustup
     ];
 
     home.file.".config/alacritty/alacritty.toml".source = ./alacritty.toml;
