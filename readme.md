@@ -1,8 +1,6 @@
 # nixos 
 
-ok hi this is my nixos config. i use it only for my home server (for now).
-
-the config is pretty much a mess and the code sucks.
+ok hi this is my nixos config. it is pretty much a mess and the code sucks but welp
 
 ## impure dependencies
 note to self on what needs to be installed on the host manually:
@@ -17,11 +15,11 @@ note to self on what needs to be installed on the host manually:
 - `/etc/secureboot/keys` - secure boot keys, generated with `sudo nix-shell -p sbctl --run "sbctl create-keys"`
 - to enroll fde onto tpm: `sudo systemd-cryptenroll /dev/nvme0n1p2 --tpm2-device=auto --tpm2-pcrs=0+2+7`
 
+nginx may not start the first time, its fine, just run `sudo systemctl restart nginx` and it should work.
+its likely due to docker containers not resolving yet. todo fix this
+
 ### teidesu-osx
 `cp /var/run/current-system/Library/Fonts/* /Library/Fonts` - copy nix-managed fonts to system fonts (waiting for [this PR](https://github.com/LnL7/nix-darwin/pull/754))
-
-nginx may not start the first time, its fine, just run `sudo systemctl restart nginx` and it should work.
-its likely due to docker containers not resolving yet.
 
 ## cat in a readme 🐈
 
