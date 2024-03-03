@@ -25,17 +25,15 @@
 
   programs.zsh.enable = true;
 
-  users.users.teidesu = {
-    home = "/Users/teidesu";
-  };
-
-  home-manager.users.teidesu = { pkgs, ... }: {
-    imports = [
-      (abs "users/teidesu/darwin.nix")
-
-      ./arc-setup.nix
-    ];
-  };
+  imports = [
+    (import (abs "users/teidesu/darwin.nix") {
+      home = {
+        imports = [
+          ./arc-setup.nix
+        ];
+      };
+    })
+  ];
 
   system.stateVersion = 4;
 }

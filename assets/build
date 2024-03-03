@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -eau
+
+_name=$(basename $1)
+name=${_name%.*}
+
+echo "Building $name"
+nix build --file $1 -vL --show-trace
+
+echo "Copying $name to ./built/$name.tgz"
+tar -czf "built/$name.tgz" result/*
