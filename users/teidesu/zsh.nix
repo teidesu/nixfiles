@@ -33,7 +33,7 @@ let
       style = "bg:#33658A";
       format = "[ $path ]($style)";
       truncation_length = 3;
-      truncation_symbol = "…/";
+      truncation_symbol = "… /";
     };
 
     git_branch = {
@@ -75,6 +75,8 @@ in {
     shellAliases = {
       "rm" = "rm -f";
       "entervenv" = "source venv/bin/activate";
+      "ls" = "ls --color=auto";
+      "ll" = "ls -l --color=auto";
     } // lib.optionalAttrs (pkgs.stdenv.isLinux) {
       "systemctl" = "sudo systemctl";
     };

@@ -28,5 +28,7 @@
       curl
       android-tools
     ];
+
+    home.file.".config/alacritty/alacritty.toml".source = ./alacritty.toml;
   };
 }
