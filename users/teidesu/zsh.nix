@@ -4,7 +4,7 @@ let
   starshipConfig = {
     # based on https://starship.rs/presets/pastel-powerline.html
     format = 
-      "[ алина 🌸](bg:#be15dc)[](#be15dc) " +
+      "[ алина 🌸](bg:#be15dc fg:#ffffff)[](#be15dc) " +
       ''''${env_var._NIX_SHELL_INFO}'' +
       "$nix_shell" +
       "$hostname" +
@@ -139,7 +139,7 @@ in {
         _NIX_SHELL_INFO="''${newargs[@]}" nix shell "''${newargs[@]}"
       }
 
-      export PATH="$HOME/.cargo/bin/:$PATH"
+      export PATH="$HOME/.cargo/bin/:$HOME/.bun/bin:$HOME/.deno/bin:$PATH"
     '';
   };
 }
