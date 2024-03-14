@@ -16,6 +16,10 @@
     forceSSL = true;
     useACMEHost = "stupid.fish";
 
+    extraConfig = ''
+      client_max_body_size 250M;
+    '';
+    
     locations."/" = {
       proxyPass = "http://web.sharkey.docker/";
       proxyWebsockets = true;
