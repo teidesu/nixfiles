@@ -14,6 +14,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
 
     nil = {
@@ -44,6 +45,7 @@
   outputs =
     inputs@{ self
     , nixpkgs
+    , nixpkgs-stable
     , vscode-server
     , agenix
     , bootspec-secureboot
@@ -68,7 +70,12 @@
             { home-manager.extraSpecialArgs = specialArgs; }
             ./hosts/koi/configuration.nix
           ];
-          inherit specialArgs;
+          specialArgs = specialArgs // {
+            pkgs-stable = import nixpkgs-stable {
+              system = "x86_64-linux";
+              config = { allowUnfree = true; };
+            };
+          };
         };
       };
 

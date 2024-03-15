@@ -1,4 +1,4 @@
-{ pkgs, ... }@inputs:
+{ pkgs, pkgs-stable, ... }@inputs:
 
 let
   mkDiskFlags = disks: if (builtins.length disks == 0) then [ ] else
@@ -50,7 +50,7 @@ let
     , disks ? [ ]
     , usbs ? [ ]
     , extraFlags ? [ ]
-    , OVMF ? pkgs.OVMF.override {
+    , OVMF ? pkgs-stable.OVMF.override {
         secureBoot = true;
       }
     , enableTpm ? false
