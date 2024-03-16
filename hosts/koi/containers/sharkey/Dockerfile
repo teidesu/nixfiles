@@ -9,4 +9,5 @@ USER sharkey
 RUN patch -p0 < /patches/zond.patch && \
     patch -p0 < /patches/software.patch && \
     patch -p0 < /patches/stats.patch && \
+    cp -f /patches/robots.txt /sharkey/packages/backend/assets/robots.txt && \
     node /patches/patch-locale.js
