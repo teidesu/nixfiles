@@ -143,6 +143,10 @@ let
         sftpgoConfig
       ];
 
+      environment.systemPackages = with pkgs; [
+        uxplay
+      ];
+
       users.groups.puffer = { };
       users.users.smb-guest = {
         isNormalUser = true;
@@ -157,7 +161,8 @@ let
         "d /mnt/puffer/Backups 0755 smb-guest puffer - -"
       ];
 
-      networking.firewall.allowedTCPPorts = [ 22 ];
+      networking.firewall.allowedTCPPorts = [ 22 7000 7001 7002 ];
+      networking.firewall.allowedUDPPorts = [ 22 7000 7001 7002 ];
     };
 
     mounts = {

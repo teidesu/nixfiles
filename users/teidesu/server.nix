@@ -3,7 +3,7 @@
 {
   users.users.teidesu = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "kvm" "docker" ];
+    extraGroups = [ "wheel" "kvm" "docker" "pipewire" ];
     shell = pkgs.zsh;
 
     openssh.authorizedKeys.keyFiles = [

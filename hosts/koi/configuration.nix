@@ -16,6 +16,7 @@
     ./services/coredns.nix
     ./services/nginx.nix
 
+    ./containers/uxplay.nix
     ./containers/torrent.nix
     ./containers/puffer.nix
     ./containers/sharkey
