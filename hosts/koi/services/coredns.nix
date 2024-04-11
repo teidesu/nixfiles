@@ -43,7 +43,10 @@ in
           reload 0
           fallthrough
         }
-        forward . 8.8.8.8 8.8.4.4
+        forward . tls://8.8.8.8 tls://8.8.4.4 tls://2001:4860:4860::8888 tls://2001:4860:4860::8844 {
+          tls_servername dns.google
+          health_check 5s
+        }
       }
 
       docker:53 {
