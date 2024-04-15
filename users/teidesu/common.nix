@@ -11,6 +11,7 @@
     htop
     jq
     micro
+    comma
     inputs.nil.packages.${system}.default
     inputs.agenix.packages.${system}.default
   ];
