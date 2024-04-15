@@ -1,4 +1,4 @@
-FROM registry.activitypub.software/transfem-org/sharkey:develop@sha256:fd6c17901d7103d38837e6415b4e34fbf641e82961a6ec9d7e9c249f4779cf4e
+FROM registry.activitypub.software/transfem-org/sharkey:develop@sha256:5ba2bd0792e38f830b0d624e9327bd0419de597f604af74eb895d64ccfdf86b4
 
 COPY patches /patches
 
