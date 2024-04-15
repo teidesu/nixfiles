@@ -9,8 +9,9 @@
         src = dir;
         builder = pkgs.writeShellScript "builder.sh" ''
           ${pkgs.coreutils}/bin/mkdir -p $out/${dirName}
-          ${pkgs.coreutils}/bin/cp -rf $src/* $out/${dirName}
-          ${pkgs.coreutils}/bin/cp -rf $src/.* $out/${dirName}
+          for i in $(${pkgs.coreutils}/bin/ls -A $src); do
+            ${pkgs.coreutils}/bin/cp -rf $src/$i $out/${dirName}
+          done
         '';
         system = pkgs.system;
       };

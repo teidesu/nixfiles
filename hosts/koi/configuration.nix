@@ -15,6 +15,7 @@
     ./services/ss-client.nix
     ./services/coredns.nix
     ./services/nginx.nix
+    ./services/landing
 
     ./containers/uxplay.nix
     ./containers/torrent.nix

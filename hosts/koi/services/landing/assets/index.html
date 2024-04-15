@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>stupid.fish</title>
+    <style>
+      body {
+        background-color: #000;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+        margin: 0;
+      }
+
+      video {
+        border: 4px #000 solid;
+        outline: 2px #FFF solid;
+      }
+
+      h1 {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 2.5rem;
+        font-weight: 400;
+        font-style: normal;
+        margin-top: 8px;
+        margin-bottom: 32px;
+        text-align: center;
+      }
+
+      @media (max-width: 540px) {
+        video {
+          width: 80%;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <video autoplay muted loop src="alina.mp4"></video>
+    <h1>stupid.fish technologies</h1>
+  </body>
+</html>
