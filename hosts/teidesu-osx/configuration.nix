@@ -1,4 +1,5 @@
 { pkgs
+, lib
 , abs
 , inputs
 , ...
@@ -10,7 +11,20 @@
     settings.trusted-users = [ "@admin" ];
 
     useDaemon = true;
+    
+    registry = {
+      nixpkgs.to = {
+        type = "github";
+        owner = "NixOS";
+        repo = "nixpkgs";
+        rev = inputs.nixpkgs.rev;
+      };
+    };
+
+    settings.nix-path = [ "nixpkgs=flake:nixpkgs" ];
   };
+  # nixpkgs.flake.source = lib.mkForce null;
+
   nixpkgs.hostPlatform = "aarch64-darwin";
   services.nix-daemon.enable = true;
 
