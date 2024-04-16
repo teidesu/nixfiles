@@ -21,7 +21,7 @@
       ripgrep
       fnm
       aria2
-      ffmpeg
+      ffmpeg-full
       hyfetch
       wget
       watch
