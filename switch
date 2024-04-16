@@ -24,6 +24,11 @@ if [ "$1" == "boot" ]; then
 fi
 
 if [ "$(uname)" == "Darwin" ]; then
+    git add -f hosts/teidesu-osx/arc-setup.nix
+    function restore {
+        git restore --staged hosts/teidesu-osx/arc-setup.nix
+    }
+    trap restore EXIT
     if command -v darwin-rebuild &> /dev/null; then
         darwin-rebuild switch --flake . $args $@
     else
