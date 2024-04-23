@@ -140,4 +140,6 @@ in {
       export PATH="$HOME/.cargo/bin/:$HOME/.bun/bin:$HOME/.deno/bin:$PATH"
     '';
   };
+
+  programs.nix-index.enable = true;
 }
