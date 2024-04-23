@@ -29,6 +29,7 @@
       android-tools
       imagemagick
       rustup
+      yt-dlp
     ];
 
     home.file.".config/alacritty/alacritty.toml".source = ./alacritty.toml;

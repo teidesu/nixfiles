@@ -65,14 +65,6 @@ in {
   programs.zsh = {
     enable = true;
 
-    # oh-my-zsh = {
-    #   enable = true;
-    #   theme = "agnoster";
-    #   extraConfig = ''
-    #     zstyle ':bracketed-paste-magic' active-widgets '.self-*'
-    #   '';
-    # };
-
     syntaxHighlighting.enable = true;
     enableAutosuggestions = true;
 
@@ -93,6 +85,10 @@ in {
       export STARSHIP_CONFIG=${(pkgs.formats.toml {}).generate "starship.toml" starshipConfig}
       eval "$(${pkgs.starship}/bin/starship init zsh)"
 
+      export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+      zstyle ':completion:*' format $'\e[2;37mcompleting %d\e[m'
+      source <(carapace _carapace zsh)
+
       CASE_SENSITIVE="false"
       HYPHEN_INSENSITIVE="true"
       ENABLE_CORRECTION="true"
@@ -104,8 +100,10 @@ in {
       autoload -U down-line-or-beginning-search
       zle -N up-line-or-beginning-search
       zle -N down-line-or-beginning-search
-      bindkey "^[[A" up-line-or-beginning-search # Up
-      bindkey "^[[B" down-line-or-beginning-search # Down
+      bindkey "^[[A" up-line-or-beginning-search
+      bindkey "^[OA" up-line-or-beginning-search
+      bindkey "^[[B" down-line-or-beginning-search
+      bindkey "^[OB" down-line-or-beginning-search
 
       WORDCHARS="*?_-.[]~=&;!#$%^"
 
@@ -113,7 +111,7 @@ in {
       autoload -Uz compinit
       compinit
       zstyle ':completion:*' menu select
-
+      zstyle ':completion:*' matcher-list ''' 'm:{a-zA-Z}={A-Za-z}'
 
       if command -v micro &> /dev/null; then
         export EDITOR="micro"

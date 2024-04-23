@@ -12,6 +12,7 @@
     jq
     micro
     comma
+    carapace
     inputs.nil.packages.${system}.default
     inputs.agenix.packages.${system}.default
   ];
