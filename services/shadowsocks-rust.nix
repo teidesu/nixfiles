@@ -70,7 +70,10 @@ in
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     path = [ package ] ++ optional (plugin != null) plugin ++ optional (passwordFile != null) pkgs.jq;
-    serviceConfig.PrivateTmp = true;
+    serviceConfig = {
+      PrivateTmp = true;
+      Restart = "on-failure";
+    };
     script = ''
       cp ${configFile} /tmp/shadowsocks.json
       ${optionalString (passwordFile != null) ''
