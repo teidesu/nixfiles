@@ -2,6 +2,7 @@
   imports = [
     inputs.nix-index-database.hmModules.nix-index
     ./zsh.nix
+    ./git.nix
   ];
 
   home.stateVersion = "23.11";
