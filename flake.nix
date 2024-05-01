@@ -17,11 +17,6 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
     vscode-server.url = "github:Ten0/nixos-vscode-server";
 
-    nil = {
-      url = "github:oxalica/nil";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -15,7 +15,7 @@
     jq
     micro
     carapace
-    inputs.nil.packages.${system}.default
+    nil
     inputs.agenix.packages.${system}.default
   ];
 }
