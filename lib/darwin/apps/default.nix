@@ -9,7 +9,9 @@
 # i'll just handle dmg's myself :D
 
 let 
-  repo = pkgs.callPackage ./productivity.nix {};
+  repo = 
+    (pkgs.callPackage ./productivity.nix {})
+    // (pkgs.callPackage ./system.nix {});
 in appsFactory: {
   system.activationScripts.postUserActivation.text = ''
     set -eau

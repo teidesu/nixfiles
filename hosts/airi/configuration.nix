@@ -14,6 +14,11 @@
         alacritty
         raycast
         karabiner
+        wireguard
+        brave
+        forkgram
+        snipaste
+        nekoray
     ]))
     (import (abs "users/teidesu/darwin.nix") {})
   ];

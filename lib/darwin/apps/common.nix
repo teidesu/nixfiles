@@ -14,13 +14,13 @@ rec {
   withMountedDmg = path: shell: ''
     _result=$(hdiutil mount ${path} | tail -n1)
     DMG_DEVICE=$(echo "$_result" | awk '{print $1}')
-    DMG_MOUNTPOINT=$(echo "$_result" | awk '{print $3}')
+    DMG_MOUNTPOINT=$(echo "$_result" | perl -lane 'print "@F[2..$#F]"')
     unset _result
 
     function _unmount {
       hdiutil unmount $DMG_DEVICE > /dev/null
     }
-    trap _unmount ERR exit
+    # trap _unmount ERR exit
     
     ${shell}
 
@@ -63,6 +63,38 @@ rec {
         installer -pkg "$DMG_MOUNTPOINT/"${lib.escapeShellArg filename} -target /
       ''}
       rm -rf $DOWNLOADED_FILE
+    fi
+  '';
+
+  downloadAndInstallZipApp = { 
+    url,
+    filename,
+    params ? "",
+    renameTo ? null,
+    afterInstall ? ""
+  }: let 
+    conditionFile = if renameTo == null then filename else renameTo;
+  in ''
+    if [ ! -d "/Applications/"${lib.escapeShellArg (builtins.baseNameOf conditionFile)} ]; then
+      ${download { inherit url params; }}
+      tmpdir=$(mktemp -d)
+      unzip -q $DOWNLOADED_FILE -d $tmpdir
+
+      if [ ! -d "$tmpdir/"${lib.escapeShellArg filename} ]; then
+        echo "Error: file not found:" ${lib.escapeShellArg filename}
+        rm -rf $DOWNLOADED_FILE $tmpdir
+        exit 1
+      fi
+
+      ${if (renameTo != null) then ''
+        mv "$tmpdir/"${lib.escapeShellArg filename} "$tmpdir/"${lib.escapeShellArg renameTo}
+        mv "$tmpdir/"${lib.escapeShellArg renameTo} /Applications
+      '' else ''
+        mv "$tmpdir/"${lib.escapeShellArg filename} /Applications
+      ''}
+      rm -rf $DOWNLOADED_FILE $tmpdir
+
+      ${afterInstall}
     fi
   '';
 }
