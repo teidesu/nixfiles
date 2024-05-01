@@ -23,17 +23,25 @@ if [ "$1" == "boot" ]; then
     shift
 fi
 
+flake="."
+if [ ! -z ${NIX_HOSTNAME+x} ]; then
+    flake=".#$NIX_HOSTNAME"
+fi
+
 if [ "$(uname)" == "Darwin" ]; then
-    git add -f hosts/teidesu-osx/arc-setup.nix
-    function restore {
-        git restore --staged hosts/teidesu-osx/arc-setup.nix
-    }
-    trap restore EXIT
+    if [ $(hostname) == "teidesu-osx" ]; then
+        git add -f hosts/teidesu-osx/arc-setup.nix
+        function restore {
+            git restore --staged hosts/teidesu-osx/arc-setup.nix
+        }
+        trap restore EXIT
+    fi
+
     if command -v darwin-rebuild &> /dev/null; then
-        darwin-rebuild switch --flake . $args $@
+        darwin-rebuild switch --flake $flake $args $@
     else
-        nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake . $args $@
+        nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake $flake $args $@
     fi
 else
-    sudo nixos-rebuild $cmd --flake . $args $@
+    sudo nixos-rebuild $cmd --flake $flake $args $@
 fi

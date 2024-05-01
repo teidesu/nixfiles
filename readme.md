@@ -21,6 +21,16 @@ its likely due to docker containers not resolving yet. todo fix this
 ### teidesu-osx
 `cp /var/run/current-system/Library/Fonts/* /Library/Fonts` - copy nix-managed fonts to system fonts (waiting for [this PR](https://github.com/LnL7/nix-darwin/pull/754))
 
+### setting up
+
+macos:
+```bash
+curl -L https://nixos.org/nix/install | sh
+git clone https://github.com/teidesu/nixos ~/nixos
+cd ~/nixos
+./switch
+```
+
 ## cat in a readme 🐈
 
 ![cat](https://cataas.com/cat)
