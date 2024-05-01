@@ -13,7 +13,7 @@ name="$1"
 script_dir=$(dirname "$(readlink -f "$0")")
 
 if [ "$is_unsafe" == "true" ]; then
-    name="$name.UNSAFE"
+    name="UNSAFE.$name"
     public_key=$(cat "$script_dir/ssh/agenix-unsafe.pub")
 else
     public_key=$(cat "$script_dir/ssh/agenix.pub")

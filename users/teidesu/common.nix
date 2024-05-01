@@ -3,6 +3,7 @@
     inputs.nix-index-database.hmModules.nix-index
     ./zsh.nix
     ./git.nix
+    ./ssh.nix
   ];
 
   home.stateVersion = "23.11";

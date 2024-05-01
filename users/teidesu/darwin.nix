@@ -32,6 +32,6 @@
       yt-dlp
     ];
 
-    home.file.".config/alacritty/alacritty.toml".source = ./alacritty.toml;
+    home.file.".config/alacritty/alacritty.toml".source = ./assets/alacritty.toml;
   };
 }
