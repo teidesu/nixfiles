@@ -29,7 +29,8 @@
   services.nix-daemon.enable = true;
 
   age.identityPaths = [
-    "/Users/teidesu/.ssh/agenix_key"
+    "/Users/teidesu/.ssh/agenix-key"
+    "/Users/Shared/agenix-key-unsafe"
   ];
 
   security.pam.enableSudoTouchIdAuth = true;
