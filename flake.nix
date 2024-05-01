@@ -87,6 +87,16 @@
           ];
           inherit specialArgs;
         };
+
+        airi = nix-darwin.lib.darwinSystem {
+          modules = [
+            agenix.darwinModules.default
+            home-manager.darwinModules.home-manager
+            { home-manager.extraSpecialArgs = specialArgs; }
+            ./hosts/airi/configuration.nix
+          ];
+          inherit specialArgs;
+        };
       };
     };
 }
