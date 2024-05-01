@@ -1,4 +1,4 @@
-{ wget, lib, ... }:
+{ wget, lib }:
 
 rec {
   download = { 

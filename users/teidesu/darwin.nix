@@ -1,15 +1,23 @@
-{ home ? {}, ... }:
+{ 
+  home ? {},
+  ...
+}:
 
 {
   imports = [
     ./fonts.nix
+    ./macos-defaults.nix
   ];
 
   users.users.teidesu = {
     home = "/Users/teidesu";
   };
 
-  home-manager.users.teidesu = { pkgs, ... }: {
+  age.identityPaths = [
+    "/Users/teidesu/.ssh/agenix-key"
+  ];
+
+  home-manager.users.teidesu = { pkgs, abs, ... }: {
     imports = [
       ./common.nix
       

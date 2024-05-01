@@ -1,4 +1,4 @@
-{ callPackage, ... }: 
+{ callPackage }: 
 
 let 
   common = callPackage ./common.nix {};

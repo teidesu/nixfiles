@@ -1,39 +1,11 @@
 { pkgs
 , lib
 , abs
-, inputs
 , ...
-}:
+}@inputs:
 
 {
-  nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
-    settings.trusted-users = [ "@admin" ];
-
-    useDaemon = true;
-    
-    registry = {
-      nixpkgs.to = {
-        type = "github";
-        owner = "NixOS";
-        repo = "nixpkgs";
-        rev = inputs.nixpkgs.rev;
-      };
-    };
-
-    settings.nix-path = [ "nixpkgs=flake:nixpkgs" ];
-  };
-  # nixpkgs.flake.source = lib.mkForce null;
-
   nixpkgs.hostPlatform = "aarch64-darwin";
-  services.nix-daemon.enable = true;
-
-  age.identityPaths = [
-    "/Users/teidesu/.ssh/agenix-key"
-    "/Users/Shared/agenix-key-unsafe"
-  ];
-
-  security.pam.enableSudoTouchIdAuth = true;
 
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
@@ -41,6 +13,12 @@
   programs.zsh.enable = true;
 
   imports = [
+    ../darwin-common.nix
+    (import (abs "lib/darwin/apps") inputs (apps: with apps; [
+        alacritty
+        raycast
+        karabiner
+    ]))
     (import (abs "users/teidesu/darwin.nix") {
       home = {
         imports = [
