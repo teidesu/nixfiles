@@ -31,7 +31,7 @@ clusterLimit: 2
 
 maxNoteLength: 30000
 
-proxy: 'http://10.42.0.2:7891'
+proxy: 'http://10.42.0.2:7890'
 proxyBypassHosts:
   - api.deepl.com
   - api-free.deepl.com

@@ -12,8 +12,8 @@
 
     ./partials/fde.nix
 
-    ./services/ss-client.nix
     ./services/coredns.nix
+    ./services/sing-box.nix
     ./services/nginx.nix
     ./services/landing
 
