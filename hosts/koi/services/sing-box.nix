@@ -145,6 +145,6 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 7890 ];
+  networking.firewall.allowedTCPPorts = [ 5353 7890 ];
   networking.firewall.allowedUDPPorts = [ 5353 ]; 
 }
