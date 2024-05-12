@@ -28,13 +28,18 @@ if [ ! -z ${NIX_HOSTNAME+x} ]; then
     flake=".#$NIX_HOSTNAME"
 fi
 
+function on_exit {
+    git restore --staged secrets/unsafe.key
+    if [ $(hostname) == "teidesu-osx" ]; then
+        git restore --staged hosts/teidesu-osx/arc-setup.nix
+    fi
+}
+trap on_exit EXIT
+
+git add -f secrets/unsafe.key
 if [ "$(uname)" == "Darwin" ]; then
     if [ $(hostname) == "teidesu-osx" ]; then
         git add -f hosts/teidesu-osx/arc-setup.nix
-        function restore {
-            git restore --staged hosts/teidesu-osx/arc-setup.nix
-        }
-        trap restore EXIT
     fi
 
     if command -v darwin-rebuild &> /dev/null; then

@@ -42,16 +42,12 @@ export MICRO_CONFIG_HOME="$micro_config_dir"
 export EDITOR=micro
 export RULES="$tempfile"
 
-if [ "$(uname)" == "Darwin" ]; then
-  if [ "$is_unsafe" == "true" ]; then
-    private_path="/Users/Shared/agenix-key-unsafe"
-  else
+if [ "$is_unsafe" == "true" ]; then
+  private_path="$script_dir/secrets/unsafe.key"
+else
+  if [ "$(uname)" == "Darwin" ]; then
     private_path="$HOME/.ssh/agenix-key"
-  fi
-else 
-  if [ "$is_unsafe" == "true" ]; then
-    private_path="/etc/ssh/agenix-key-unsafe"
-  else
+  else 
     private_path="/etc/ssh/agenix-key"
   fi
 fi

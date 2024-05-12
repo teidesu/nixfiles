@@ -7,7 +7,7 @@ note to self on what needs to be installed on the host manually:
 
 ### common
 - `/etc/ssh/agenix-key` (darwin: `~/.ssh/agenix-key`) - private key for secret decryption
-- `/etc/ssh/agenix-key-unsafe` (darwin: `/Users/Shared/agenix-key-unsafe`) - private key for unsafe secret decryption
+- `./secrets/unsafe.key` - private key for unsafe secret decryption
 
 > "unsafe" secrets are only secret to the "outside" world (i.e. the git repo), but are decrypted at build-time
 > and are available globally to the system. this is useful for things like server ips, since i don't want to

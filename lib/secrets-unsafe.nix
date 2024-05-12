@@ -2,14 +2,12 @@
   age, 
   writeShellScript, 
   system,
-  stdenv,
   ...
 }: 
 
 {
   readUnsafe = name: let 
-    isDarwin = stdenv.isDarwin;
-    identityPath = if isDarwin then "/Users/Shared/agenix-key-unsafe" else "/etc/ssh/agenix-key-unsafe";
+    identityPath = ../secrets/unsafe.key;
 
     path = ../secrets + "/UNSAFE.${name}.age";
     drv = builtins.derivation { 
