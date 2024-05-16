@@ -8,6 +8,7 @@
     ApplePressAndHoldEnabled = false;
     AppleShowAllFiles = true;
     AppleShowAllExtensions = true;
+    AppleFontSmoothing = 0;
     AppleShowScrollBars = "WhenScrolling";
     NSAutomaticCapitalizationEnabled = false;
     NSAutomaticDashSubstitutionEnabled = false;
