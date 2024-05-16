@@ -137,7 +137,7 @@ in {
         _NIX_SHELL_INFO="''${newargs[@]}" nix shell "''${newargs[@]}"
       }
 
-      export PATH="$HOME/.cargo/bin/:$HOME/.bun/bin:$HOME/.deno/bin:$PATH"
+      export PATH="$HOME/.local/bin:$HOME/.cargo/bin/:$HOME/.bun/bin:$HOME/.deno/bin:$PATH"
     '';
   };
 

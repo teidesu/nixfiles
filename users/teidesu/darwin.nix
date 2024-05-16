@@ -38,6 +38,9 @@
       imagemagick
       rustup
       yt-dlp
+      (python311.withPackages (ps: with ps; [
+        pipx
+      ]))
     ];
 
     home.file.".config/alacritty/alacritty.toml".source = ./assets/alacritty.toml;
