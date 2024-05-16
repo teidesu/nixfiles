@@ -41,7 +41,6 @@
     ];
 
     home.file.".config/alacritty/alacritty.toml".source = ./assets/alacritty.toml;
-    home.file.".config/new-alacritty-window.scpt".source = ./assets/new-alacritty-window.scpt; # todo: reference this directly from store
     home.file.".config/karabiner/karabiner.json".source = ./assets/karabiner.json;
   };
 }

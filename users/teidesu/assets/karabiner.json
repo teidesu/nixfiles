@@ -67,27 +67,6 @@
                                 "type": "basic"
                             }
                         ]
-                    },
-                    {
-                        "description": "New Alacritty Window",
-                        "manipulators": [
-                            {
-                                "from": {
-                                    "key_code": "return_or_enter",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "command"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "osascript /Users/teidesu/.config/new-alacritty-window.scpt"
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
                     }
                 ]
             },
