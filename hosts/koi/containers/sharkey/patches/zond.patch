@@ -1,5 +1,5 @@
---- packages/backend/built/server/web/views/base.pug
-+++ packages/backend/built/server/web/views/base.pug
+--- a/packages/backend/src/server/web/views/base.pug
++++ b/packages/backend/src/server/web/views/base.pug
 @@ -44,5 +44,6 @@
  		link(rel='stylesheet' href='/static-assets/fonts/sharkey-icons/style.css')
  		link(rel='modulepreload' href=`/vite/${clientEntry.file}`)

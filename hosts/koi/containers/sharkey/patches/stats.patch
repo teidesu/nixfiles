@@ -1,25 +1,29 @@
---- packages/backend/built/server/api/endpoints/stats.js
-+++ packages/backend/built/server/api/endpoints/stats.js
-@@ -85,8 +85,8 @@
-             const originalNotesCount = notesChart.local.total[0];
-             const usersChart = await this.usersChart.getChart('hour', 1, null);
--            const usersCount = usersChart.local.total[0] + usersChart.remote.total[0];
--            const originalUsersCount = usersChart.local.total[0];
-+            const usersCount = 1 + usersChart.remote.total[0];
-+            const originalUsersCount = 1;
-             const [reactionsCount, //originalReactionsCount,
-             instances] = await Promise.all([
-                 this.noteReactionsRepository.count({
+--- a/packages/backend/src/server/api/endpoints/stats.ts
++++ b/packages/backend/src/server/api/endpoints/stats.ts
+@@ -75,9 +75,9 @@
+ 			const originalNotesCount = notesChart.local.total[0];
+ 
+ 			const usersChart = await this.usersChart.getChart('hour', 1, null);
+-			const usersCount = usersChart.local.total[0] + usersChart.remote.total[0];
+-			const originalUsersCount = usersChart.local.total[0];
++			const usersCount = 1 + usersChart.remote.total[0];
++			const originalUsersCount = 1;
+ 
+ 			const [
+ 				reactionsCount,
+ 				//originalReactionsCount,
 
---- packages/backend/built/server/NodeinfoServerService.js
-+++ packages/backend/built/server/NodeinfoServerService.js
-@@ -58,8 +58,7 @@
-             const now = Date.now();
-             const notesChart = await this.notesChart.getChart('hour', 1, null);
-             const localPosts = notesChart.local.total[0];
--            const usersChart = await this.usersChart.getChart('hour', 1, null);
--            const total = usersChart.local.total[0];
-+            const total = 1;
-             const [meta] = await Promise.all([
-                 this.metaService.fetch(true)
-             ]);
+--- a/packages/backend/src/server/NodeinfoServerService.ts
++++ b/packages/backend/src/server/NodeinfoServerService.ts
+@@ -50,10 +50,9 @@
+ 			const now = Date.now();
+ 
+ 			const notesChart = await this.notesChart.getChart('hour', 1, null);
+ 			const localPosts = notesChart.local.total[0];
+ 
+-			const usersChart = await this.usersChart.getChart('hour', 1, null);
+-			const total = usersChart.local.total[0];
++			const total = 1;
+ 
+ 			const [
+ 				meta,

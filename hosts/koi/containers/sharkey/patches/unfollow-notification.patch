@@ -1,0 +1,65 @@
+diff --git a/packages/backend/src/core/UserFollowingService.ts b/packages/backend/src/core/UserFollowingService.ts
+index deeecde..02beb42 100644
+--- a/packages/backend/src/core/UserFollowingService.ts
++++ b/packages/backend/src/core/UserFollowingService.ts
+@@ -403,6 +403,8 @@ export class UserFollowingService implements OnModuleInit {
+ 					});
+ 				}
+ 			});
++
++			this.notificationService.createNotification(followee.id, 'unfollow', {}, follower.id);
+ 		}
+ 
+ 		if (this.userEntityService.isLocalUser(follower) && this.userEntityService.isRemoteUser(followee)) {
+diff --git a/packages/backend/src/models/Notification.ts b/packages/backend/src/models/Notification.ts
+index 4ed71a1..0bbd0ca 100644
+--- a/packages/backend/src/models/Notification.ts
++++ b/packages/backend/src/models/Notification.ts
+@@ -15,7 +15,7 @@ export type MiNotification = {
+ 	notifierId: MiUser['id'];
+ 	noteId: MiNote['id'];
+ } | {
+-	type: 'follow';
++	type: 'follow' | 'unfollow';
+ 	id: string;
+ 	createdAt: string;
+ 	notifierId: MiUser['id'];
+diff --git a/packages/frontend/src/components/MkNotification.vue b/packages/frontend/src/components/MkNotification.vue
+index 562cc38..6ea1598 100644
+--- a/packages/frontend/src/components/MkNotification.vue
++++ b/packages/frontend/src/components/MkNotification.vue
+@@ -15,7 +15,7 @@ SPDX-License-Identifier: AGPL-3.0-only
+ 		<img v-else-if="notification.icon" :class="[$style.icon, $style.icon_app]" :src="notification.icon" alt=""/>
+ 		<div
+ 			:class="[$style.subIcon, {
+-				[$style.t_follow]: notification.type === 'follow',
++				[$style.t_follow]: notification.type === 'follow' || notification.type === 'unfollow',
+ 				[$style.t_followRequestAccepted]: notification.type === 'followRequestAccepted',
+ 				[$style.t_receiveFollowRequest]: notification.type === 'receiveFollowRequest',
+ 				[$style.t_renote]: notification.type === 'renote',
+@@ -29,6 +29,7 @@ SPDX-License-Identifier: AGPL-3.0-only
+ 			}]"
+ 		> <!-- we re-use t_pollEnded for "edited" instead of making an identical style -->
+ 			<i v-if="notification.type === 'follow'" class="ph-plus ph-bold ph-lg"></i>
++			<i v-else-if="notification.type === 'unfollow'" class="ph-minus ph-bold ph-lg"></i>
+ 			<i v-else-if="notification.type === 'receiveFollowRequest'" class="ph-clock ph-bold ph-lg"></i>
+ 			<i v-else-if="notification.type === 'followRequestAccepted'" class="ph-check ph-bold ph-lg"></i>
+ 			<i v-else-if="notification.type === 'renote'" class="ph-rocket-launch ph-bold ph-lg"></i>
+@@ -60,6 +61,7 @@ SPDX-License-Identifier: AGPL-3.0-only
+ 			<span v-else-if="notification.type === 'achievementEarned'">{{ i18n.ts._notification.achievementEarned }}</span>
+ 			<span v-else-if="notification.type === 'test'">{{ i18n.ts._notification.testNotification }}</span>
+ 			<MkA v-else-if="notification.type === 'follow' || notification.type === 'mention' || notification.type === 'reply' || notification.type === 'renote' || notification.type === 'quote' || notification.type === 'reaction' || notification.type === 'receiveFollowRequest' || notification.type === 'followRequestAccepted'" v-user-preview="notification.user.id" :class="$style.headerName" :to="userPage(notification.user)"><MkUserName :user="notification.user"/></MkA>
++			<MkA v-else-if="notification.type === 'unfollow'" v-user-preview="notification.user.id" :class="$style.headerName" :to="userPage(notification.user)"><MkUserName :user="notification.user"/></MkA>
+ 			<span v-else-if="notification.type === 'reaction:grouped'">{{ i18n.tsx._notification.reactedBySomeUsers({ n: notification.reactions.length }) }}</span>
+ 			<span v-else-if="notification.type === 'renote:grouped'">{{ i18n.tsx._notification.renotedBySomeUsers({ n: notification.users.length }) }}</span>
+ 			<span v-else-if="notification.type === 'app'">{{ notification.header }}</span>
+@@ -103,6 +105,9 @@ SPDX-License-Identifier: AGPL-3.0-only
+ 			<template v-else-if="notification.type === 'follow'">
+ 				<span :class="$style.text" style="opacity: 0.6;">{{ i18n.ts.youGotNewFollower }}</span>
+ 			</template>
++			<template v-else-if="notification.type === 'unfollow'">
++				<span :class="$style.text" style="opacity: 0.6;">unfollowed you</span>
++			</template>
+ 			<span v-else-if="notification.type === 'followRequestAccepted'" :class="$style.text" style="opacity: 0.6;">{{ i18n.ts.followRequestAccepted }}</span>
+ 			<template v-else-if="notification.type === 'receiveFollowRequest'">
+ 				<span :class="$style.text" style="opacity: 0.6;">{{ i18n.ts.receiveFollowRequest }}</span>
