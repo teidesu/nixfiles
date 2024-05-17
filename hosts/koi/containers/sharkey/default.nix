@@ -15,6 +15,7 @@
   services.nginx.virtualHosts."very.stupid.fish" = {
     forceSSL = true;
     useACMEHost = "stupid.fish";
+    http2 = true;
 
     extraConfig = ''
       client_max_body_size 250M;
