@@ -36,6 +36,8 @@ RUN git apply /patches/stats.patch
 RUN git apply /patches/limits.patch
 RUN git apply /patches/unfollow-notification.patch
 RUN git apply /patches/webhook-notification.patch
+# motivation: https://very.stupid.fish/notes/9shhrn2qncid008s
+RUN git apply /patches/index-everything.patch
 RUN cp -f /patches/robots.txt packages/backend/assets/robots.txt
 # end patch
 

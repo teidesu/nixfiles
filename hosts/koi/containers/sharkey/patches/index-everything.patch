@@ -1,0 +1,47 @@
+diff --git a/packages/backend/src/core/NoteCreateService.ts b/packages/backend/src/core/NoteCreateService.ts
+index 631d707..cf537fd 100644
+--- a/packages/backend/src/core/NoteCreateService.ts
++++ b/packages/backend/src/core/NoteCreateService.ts
+@@ -952,7 +952,7 @@ export class NoteCreateService implements OnApplicationShutdown {
+ 		}
+ 
+ 		// Register to search database
+-		if (!user.noindex) this.index(note);
++		this.index(note);
+ 	}
+ 
+ 	@bindThis
+@@ -1051,7 +1051,7 @@ export class NoteCreateService implements OnApplicationShutdown {
+ 		}
+ 
+ 		// Register to search database
+-		if (!user.noindex) this.index(note);
++		this.index(note);
+ 	}
+ 
+ 	@bindThis
+diff --git a/packages/backend/src/core/NoteEditService.ts b/packages/backend/src/core/NoteEditService.ts
+index a01dfec..8fd3138 100644
+--- a/packages/backend/src/core/NoteEditService.ts
++++ b/packages/backend/src/core/NoteEditService.ts
+@@ -728,7 +728,7 @@ export class NoteEditService implements OnApplicationShutdown {
+ 		}
+ 
+ 		// Register to search database
+-		if (!user.noindex) this.index(note);
++		this.index(note);
+ 	}
+ 
+ 	@bindThis
+diff --git a/packages/backend/src/core/SearchService.ts b/packages/backend/src/core/SearchService.ts
+index 6dc3e85..087bd36 100644
+--- a/packages/backend/src/core/SearchService.ts
++++ b/packages/backend/src/core/SearchService.ts
+@@ -115,7 +115,6 @@ export class SearchService {
+ 	@bindThis
+ 	public async indexNote(note: MiNote): Promise<void> {
+ 		if (note.text == null && note.cw == null) return;
+-		if (!['home', 'public'].includes(note.visibility)) return;
+ 
+ 		if (this.meilisearch) {
+ 			switch (this.meilisearchIndexScope) {
