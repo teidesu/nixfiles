@@ -21,6 +21,7 @@
     ./containers/torrent.nix
     ./containers/puffer.nix
     ./containers/sharkey
+    ./containers/pds
     ./vms/hass.nix
     # ./vms/windows.nix
   ];

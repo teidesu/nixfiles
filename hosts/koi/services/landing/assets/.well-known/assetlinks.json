@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "fish.stupid.twa",
+      "sha256_cert_fingerprints":
+      ["6B:39:DC:A2:51:76:4C:57:BF:6F:A0:CD:47:D9:F8:23:49:1B:25:E5:DE:5B:BE:7D:BB:CD:F5:A7:91:4A:AA:DD"]
+    }
+  }]

@@ -69,12 +69,25 @@ in
       # every time we change anything at all
       storeDir = trivial.storeDirectory directory;
 
-      cmdline = [
-        "--build"
-        "--remove-orphans"
-      ] ++ map (env: "--env-file ${env}") envFiles
-      ++ map (name: "-e ${name}=${lib.escapeShellArg env.${name}}") (builtins.attrNames env)
-      ++ extraFlags;
+      inlineEnvNames = builtins.attrNames env;
+      inlineEnvDrv = lib.optionals (builtins.length inlineEnvNames != 0) [
+        (pkgs.writeText "${name}.env" (
+          builtins.concatStringsSep "\n" (
+            map (name: "${name}=${builtins.toJSON env.${name}}") inlineEnvNames
+          )
+        ))
+      ];
+      allEnvFiles = envFiles ++ inlineEnvDrv;
+
+      cmdline = builtins.concatStringsSep " " (
+        [
+          "--build"
+          "--remove-orphans"
+        ] ++ extraFlags
+      );
+      cmdlineBeforeUp = builtins.concatStringsSep " " (
+        map (env: "--env-file ${lib.escapeShellArg env}") allEnvFiles
+      );
     in
     {
       systemd.services."docker-compose-${name}" = {
@@ -82,7 +95,7 @@ in
         after = [ "docker.service" "docker.socket" ];
         serviceConfig = {
           WorkingDirectory = storeDir;
-          ExecStart = "${pkgs.docker}/bin/docker compose up ${builtins.concatStringsSep " " cmdline}";
+          ExecStart = "${pkgs.docker}/bin/docker compose ${cmdlineBeforeUp} up ${cmdline}";
           ExecStopPost = "${pkgs.docker}/bin/docker compose down";
         } // (extraConfig.serviceConfig or { });
       } // (builtins.removeAttrs extraConfig [ "serviceConfig" ]);
