@@ -8,6 +8,7 @@
 
     openssh.authorizedKeys.keyFiles = [
       (abs "ssh/teidesu.pub")
+      (abs "ssh/teidesu2.pub")
     ];
   };
 
