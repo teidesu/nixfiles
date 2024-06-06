@@ -12,6 +12,7 @@
 
     ./partials/fde.nix
 
+    ./services/cage.nix
     ./services/coredns.nix
     ./services/sing-box.nix
     ./services/nginx.nix
@@ -20,9 +21,12 @@
     ./containers/uxplay.nix
     ./containers/torrent.nix
     ./containers/puffer.nix
+    ./containers/vaultwarden.nix
     ./containers/sharkey
     ./containers/pds
+    ./containers/zond
     ./vms/hass.nix
+    ./vms/bnuuy.nix
     # ./vms/windows.nix
   ];
 
@@ -68,11 +72,11 @@
     qemu.ovmf.enable = true;
     allowedBridges = [ "br0" ];
   };
-  
+
   virtualisation.docker = {
     enable = true;
   };
-  
+
   boot.extraModprobeConfig = ''
     options kvm_amd avic=1 nested=0
     options kvm ignore_msrs=N report_ignored_msrs=Y

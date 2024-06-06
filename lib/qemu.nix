@@ -12,9 +12,10 @@ let
         name = disk.name;
         driver = disk.driver or "qcow2";
         path = disk.path;
+        readonly = disk.readonly or false;
       in
       builtins.concatStringsSep " " [
-        "-blockdev driver=${driver},file.driver=file,file.filename=${path},file.aio=io_uring,discard=unmap,detect-zeroes=unmap,read-only=off,cache.direct=on,node-name=${name}"
+        "-blockdev driver=${driver},file.driver=file,file.filename=${path},file.aio=io_uring,discard=unmap,detect-zeroes=unmap,read-only=${if readonly then "on" else "off"},cache.direct=on,node-name=${name}"
         "-device scsi-hd,drive=${name},bus=scsi.0,rotation_rate=1,physical_block_size=512,logical_block_size=512,id=scsi-${name}"
       ]
     )
@@ -106,6 +107,40 @@ let
       "-netdev tap,id=net0,ifname=${tap},script=no,downscript=no"
       "-device virtio-net-pci,netdev=net0,mac=${macAddress}"
     ] ++ (mkDiskFlags disks) ++ (mkUsbFlags usbs) ++ extraFlags;
+  
+  mkCloudInitImage = {
+    user ? {},
+    meta ? {},
+    network ? null,
+  }: let
+    toYAML = builtins.toJSON;
+
+    metaYaml = pkgs.writeText "cloud-init-meta.yaml" (toYAML (meta // {
+      # thx https://gist.github.com/Informatic/0b6b24374b54d09c77b9d25595cdbd47
+      dsmode = "local";
+    }));
+    userYaml = pkgs.writeText "cloud-init-user.yaml" ''
+      #cloud-config
+      ${toYAML user}
+    '';
+    networkYaml = pkgs.writeText "cloud-init-network.yaml" (toYAML {
+      inherit network;
+    });
+
+    args = [] 
+      ++ pkgs.lib.optionals (network != null) [
+        "--network-config"
+        "${networkYaml}"
+      ];
+    argsText = builtins.concatStringsSep " " args;
+  in pkgs.stdenvNoCC.mkDerivation {
+    name = "cloud-init-seed.img";
+    buildInputs = [ pkgs.cloud-utils ];
+    dontUnpack = true;
+    buildPhase = ''
+      cloud-localds ${argsText} $out ${userYaml} ${metaYaml}
+    '';
+  };
 in
 {
   mkSystemdService =
@@ -152,4 +187,12 @@ in
         ${if (tapName != null) then (tapStopCommands tapName) else ""}
       '';
     };
+
+  inherit mkCloudInitImage;
+  mkCloudInitDisk = params: {
+    name = "init";
+    driver = "raw";
+    path = mkCloudInitImage params;
+    readonly = true;
+  };
 }

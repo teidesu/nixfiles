@@ -16,6 +16,7 @@ note to self on what needs to be installed on the host manually:
 ### koi:
 - ~~`/etc/iso/win11.iso` - iso containing windows 11 installer (e.g. this: [magnet](magnet:?xt=urn:btih:56197d53136ffcecbae5225f0ac761121eacdac6&dn=Win11_22H2_English_x64v1.iso&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2ftracker.tiny-vps.com%3a6969%2fannounce&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce))~~ currently unused
 - `/etc/vms/haos.img` - qcow2 image for haos vm (can be downloaded from the official website, the KVM/Proxmox image).
+- `/etc/vms/bnuuy.img` - qcow2 image of an ubuntu cloud image (e.g. `https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img`)
 - `/etc/secureboot/keys` - secure boot keys, generated with `sudo nix-shell -p sbctl --run "sbctl create-keys"`
 - to enroll fde onto tpm: `sudo systemd-cryptenroll /dev/nvme0n1p2 --tpm2-device=auto --tpm2-pcrs=0+2+7`
 

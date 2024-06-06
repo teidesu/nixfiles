@@ -63,11 +63,22 @@ in {
   };
 
   security.acme.acceptTerms = true;
+  security.acme.defaults.dnsResolver = "8.8.8.8:53"; # coredns tends to cache these too much
   security.acme.certs."stupid.fish" = {
     email = "alina@tei.su";
     group = "nginx";
     dnsProvider = "cloudflare";
     extraDomainNames = [ "*.stupid.fish" ];
+    credentialFiles = {
+      "CLOUDFLARE_EMAIL_FILE" = config.age.secrets.cloudflare-email.path;
+      "CLOUDFLARE_API_KEY_FILE" = config.age.secrets.cloudflare-token.path;
+    };
+  };
+  security.acme.certs."tei.su" = {
+    email = "alina@tei.su";
+    group = "nginx";
+    dnsProvider = "cloudflare";
+    extraDomainNames = [ "*.tei.su" ];
     credentialFiles = {
       "CLOUDFLARE_EMAIL_FILE" = config.age.secrets.cloudflare-email.path;
       "CLOUDFLARE_API_KEY_FILE" = config.age.secrets.cloudflare-token.path;
