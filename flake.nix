@@ -52,50 +52,68 @@
     , ...
     }:
     let
-      specialArgs = {
+      specialArgsCommon = {
         inherit inputs;
         abs = path: ./. + ("/" + path);
+      };
+
+      mkDarwinSystem = {
+        modules ? [],
+        specialArgs ? {},
+      }: let 
+        specialArgsMerged = specialArgsCommon // specialArgs;
+      in nix-darwin.lib.darwinSystem {
+        modules = [
+          agenix.darwinModules.default
+          home-manager.darwinModules.home-manager
+          { home-manager.extraSpecialArgs = specialArgsMerged; }
+        ] ++ modules;
+        specialArgs = specialArgsMerged;
+      };
+
+      mkNixosSystem = {
+        system,
+        modules ? [],
+        specialArgs ? {}
+      }: let 
+        specialArgsMerged = specialArgsCommon // specialArgs // {
+          pkgs-stable = import nixpkgs-stable {
+            system = "x86_64-linux";
+            config = { allowUnfree = true; };
+          };
+        };
+      in nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          agenix.nixosModules.default
+          home-manager.nixosModules.home-manager
+          { home-manager.extraSpecialArgs = specialArgsMerged; }
+        ] ++ modules;
+        specialArgs = specialArgsMerged;
       };
     in
     {
       nixosConfigurations = {
-        koi = nixpkgs.lib.nixosSystem {
+        koi = mkNixosSystem {
           system = "x86_64-linux";
           modules = [
-            agenix.nixosModules.default
             bootspec-secureboot.nixosModules.bootspec-secureboot
-            home-manager.nixosModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
             ./hosts/koi/configuration.nix
           ];
-          specialArgs = specialArgs // {
-            pkgs-stable = import nixpkgs-stable {
-              system = "x86_64-linux";
-              config = { allowUnfree = true; };
-            };
-          };
         };
       };
 
       darwinConfigurations = {
-        teidesu-osx = nix-darwin.lib.darwinSystem {
+        teidesu-osx = mkDarwinSystem {
           modules = [
-            agenix.darwinModules.default
-            home-manager.darwinModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
             ./hosts/teidesu-osx/configuration.nix
           ];
-          inherit specialArgs;
         };
 
-        airi = nix-darwin.lib.darwinSystem {
+        airi = mkDarwinSystem {
           modules = [
-            agenix.darwinModules.default
-            home-manager.darwinModules.home-manager
-            { home-manager.extraSpecialArgs = specialArgs; }
             ./hosts/airi/configuration.nix
           ];
-          inherit specialArgs;
         };
       };
     };
