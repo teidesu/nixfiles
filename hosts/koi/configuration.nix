@@ -16,6 +16,7 @@
     ./services/coredns.nix
     ./services/sing-box.nix
     ./services/nginx.nix
+    ./services/phpfront.nix
     ./services/landing
 
     ./containers/uxplay.nix
