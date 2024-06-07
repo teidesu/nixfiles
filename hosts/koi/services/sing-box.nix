@@ -2,9 +2,14 @@
 
 let
   secrets = import (abs "lib/secrets.nix");
+  secretsUnsafe = pkgs.callPackage (abs "lib/secrets-unsafe.nix") {};
 in {
   imports = [
-    (secrets.declare [ "ss-desu-arm-password" "ss-desu-arm-ip" ])
+    (secrets.declare [ 
+      "madohomu-singbox-pub"
+      "madohomu-singbox-sid"
+      "madohomu-singbox-koi-uuid"
+    ])
   ];
 
   services.sing-box = {
@@ -94,21 +99,59 @@ in {
         { tag = "direct"; type = "direct"; }
         { tag = "dns-out"; type = "dns"; }
         {
-          tag = "ss-desu-arm";
-          type = "shadowsocks";
-          server._secret = config.age.secrets.ss-desu-arm-ip.path;
-          server_port = 9000;
-          method = "chacha20-ietf-poly1305";
-          password._secret = config.age.secrets.ss-desu-arm-password.path;
-          udp_over_tcp = {
+          tag = "xtls-madoka";
+          type = "vless";
+          flow = "xtls-rprx-vision";
+          server = secretsUnsafe.readUnsafe "madoka-ip";
+          server_port = 443;
+          domain_strategy = "";
+          packet_encoding = "";
+          tls = {
             enabled = true;
-            version = 1;
+            alpn = [ "h2" ];
+            server_name = "updates.cdn-apple.com";
+            reality = {
+              enabled = true;
+              public_key._secret = secrets.file config "madohomu-singbox-pub";
+              short_id._secret = secrets.file config "madohomu-singbox-sid";
+            };
+            utls = { enabled = true; fingerprint = "edge"; };
           };
+          uuid._secret = secrets.file config "madohomu-singbox-koi-uuid";
+        }
+        {
+          tag = "xtls-homura";
+          type = "vless";
+          flow = "xtls-rprx-vision";
+          server = secretsUnsafe.readUnsafe "homura-ip";
+          server_port = 443;
+          domain_strategy = "";
+          packet_encoding = "";
+          tls = {
+            enabled = true;
+            alpn = [ "h2" ];
+            server_name = "updates.cdn-apple.com";
+            reality = {
+              enabled = true;
+              public_key._secret = secrets.file config "madohomu-singbox-pub";
+              short_id._secret = secrets.file config "madohomu-singbox-sid";
+            };
+            utls = { enabled = true; fingerprint = "edge"; };
+          };
+          uuid._secret = secrets.file config "madohomu-singbox-koi-uuid";
+        }
+        {
+          tag = "auto";
+          type = "urltest";
+          outbounds = [
+            "xtls-madoka"
+            "xtls-homura"
+          ];
         }
       ];
 
       route = {
-        final = "ss-desu-arm";
+        final = "auto";
         rules = [
           {
             inbound = [ "dns-in" ];
