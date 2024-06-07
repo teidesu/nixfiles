@@ -15,13 +15,12 @@ in {
 
     extraOptionOverrides = {
       GlobalKnownHostsFile = "~/.ssh/base_known_hosts";
+      ControlPath = "~/.ssh/master-%C";
     };
 
     matchBlocks = {
-      desu-arm = {
-        hostname = secrets.readUnsafe "desu-arm-ip";
-        forwardAgent = true;
-      };
+      madoka.hostname = secrets.readUnsafe "madoka-ip";
+      homura.hostname = secrets.readUnsafe "homura-ip";
 
       koi = {
         hostname = "10.42.0.2";

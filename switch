@@ -1,32 +1,43 @@
 #!/usr/bin/env bash
 
-args=""
+args=()
 cmd="switch"
-
-if [ "$1" == "debug" ]; then
-    args="--show-trace -v -L"
-    shift
-fi
-
-if [ "$1" == "build" ]; then
-    cmd="build"
-    shift
-fi
-
-if [ "$1" == "dry-activate" ]; then
-    cmd="dry-activate"
-    shift
-fi
-
-if [ "$1" == "boot" ]; then
-    cmd="boot"
-    shift
-fi
-
 flake="."
-if [ ! -z ${NIX_HOSTNAME+x} ]; then
-    flake=".#$NIX_HOSTNAME"
-fi
+remote=0
+
+while [ $# -ne 0 ]; do
+    cur=${1}; next=${2-};
+    case "$cur" in
+        --debug) args+=("--show-trace" "-v" "-L");;
+        --build) cmd="build";;
+        --dry-activate) cmd="dry-activate";;
+        --boot) cmd="boot";;
+        --remote) 
+            sshg=$(ssh -G $next)
+            # normalize hostname
+            ssh_host=$(echo "$sshg" | awk '$1 == "hostname" { print $2 }')
+            ssh_user=$(echo "$sshg" | awk '$1 == "user" { print $2 }')
+            norm_host="$ssh_user@$ssh_host"
+
+            args+=("--fast" "--target-host" "$norm_host" "--use-remote-sudo" "--use-substitutes")
+            remote=1
+            NIX_SSHOPTS="-i $HOME/.ssh/ssh.pub"
+            shift
+            ;;
+		.\#*) flake=$cur; shift;;
+        *) echo "Unknown argument: $cur"; exit 1;;
+	esac
+	shift;
+done
+
+args=${args[@]}
+
+function log_then_run {
+    echo "$ $@"
+    $@
+}
+
+echo $args
 
 function on_exit {
     git restore --staged secrets/unsafe.key
@@ -37,16 +48,16 @@ function on_exit {
 trap on_exit EXIT
 
 git add -f secrets/unsafe.key
-if [ "$(uname)" == "Darwin" ]; then
+if [ "$(uname)" == "Darwin" -a "$remote" == 0 ]; then
     if [ $(hostname) == "teidesu-osx" ]; then
         git add -f hosts/teidesu-osx/arc-setup.nix
     fi
 
     if command -v darwin-rebuild &> /dev/null; then
-        darwin-rebuild switch --flake $flake $args $@
+        log_then_run darwin-rebuild switch --flake $flake $args $@
     else
-        nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake $flake $args $@
+        log_then_run nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake $flake $args $@
     fi
 else
-    sudo nixos-rebuild $cmd --flake $flake $args $@
+    log_then_run sudo -E nixos-rebuild $cmd --flake $flake $args $@
 fi
