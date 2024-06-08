@@ -37,8 +37,6 @@ function log_then_run {
     $@
 }
 
-echo $args
-
 function on_exit {
     git restore --staged secrets/unsafe.key
     if [ $(hostname) == "teidesu-osx" ]; then
