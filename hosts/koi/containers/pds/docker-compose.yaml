@@ -2,7 +2,7 @@ version: "3"
 
 services:
   pds:
-    image: ghcr.io/bluesky-social/pds:sha-5cd5289d470ab6e8ab3fe5b1c1698ed26dbeb4b4
+    image: ghcr.io/bluesky-social/pds:sha-3f0cdfa8441c578eb42eb6e5eadbf909abe9ecfd
     restart: unless-stopped
     environment: 
       - PDS_HOSTNAME=pds.stupid.fish
