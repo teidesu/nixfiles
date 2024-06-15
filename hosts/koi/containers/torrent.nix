@@ -17,8 +17,8 @@ in
     (containers.mkNixosContainer {
       name = "torrent";
       ephemeral = false;
-      ip = ".0.2";
-      private = true;
+      ip = "10.42.0.9";
+      private = false;
 
       config = { ... }: {
         imports = [
@@ -46,8 +46,10 @@ in
                 # upload speed doesn't matter that much
                 "Session\\TempPath" = "/var/lib/qbittorrent/temp";
                 "Session\\TempPathEnabled" = "true";
+                "Session\\Port" = "13370";
               };
               Network = {
+                "PortForwardingEnabled" = "false";
                 "Proxy\\IP" = "10.42.0.2";
                 "Proxy\\Port" = "@Variant(\\0\\0\\0\\x85\\x1e\\xd2)"; # 7890
                 "Proxy\\Type" = "SOCKS5";
@@ -60,7 +62,8 @@ in
             };
           })
         ];
-        networking.firewall.allowedTCPPorts = [ 80 ];
+        networking.firewall.allowedTCPPorts = [ 80 13370 ];
+        networking.firewall.allowedUDPPorts = [ 13370 ];
       };
 
       mounts = {
