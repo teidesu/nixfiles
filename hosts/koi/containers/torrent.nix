@@ -3,8 +3,8 @@ let
   containers = (import (abs "lib/containers.nix") inputs);
   secrets = import (abs "lib/secrets.nix");
   vueTorrent = pkgs.fetchurl {
-    url = "https://github.com/WDaan/VueTorrent/releases/download/v2.4.0/vuetorrent.zip";
-    hash = "sha256-ZM2AAJVqlzCXxvWnWhYDVBXZqpe0NzkFfYLvUTyzlZM=";
+    url = "https://github.com/WDaan/VueTorrent/releases/download/v2.9.0/vuetorrent.zip";
+    hash = "sha256-XrRfgxmRkbyi8FMXL6Pjltyawzr4SS2Gb4/Kz38tnkk=";
   };
 
   dlWebhook = secrets.mount config "qbt-dl-webhook";
