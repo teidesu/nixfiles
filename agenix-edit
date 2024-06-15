@@ -9,6 +9,13 @@ else
     is_unsafe=false
 fi
 
+if [ "$1" == "--cat" ]; then
+    is_cat=true
+    shift
+else 
+    is_cat=false
+fi
+
 name="$1"
 script_dir=$(dirname "$(readlink -f "$0")")
 
@@ -50,6 +57,10 @@ else
   else 
     private_path="/etc/ssh/agenix-key"
   fi
+fi
+
+if [ "$is_cat" == "true" ]; then
+  export EDITOR=cat
 fi
 
 agenix -e "$fullname" --identity "$private_path"
