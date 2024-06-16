@@ -9,12 +9,17 @@ in {
       "madohomu-singbox-pub"
       "madohomu-singbox-sid"
       "madohomu-singbox-koi-uuid"
+      "vless-sakura-ip"
+      "vless-sakura-pk"
+      "vless-sakura-sid"
+      "vless-sakura-uuid"
     ])
   ];
 
   services.sing-box = {
     enable = true;
     settings = {
+      log.level = "warning";
       dns = {
         rules = [
           {
@@ -31,14 +36,17 @@ in {
             server = "dns-block";
           }
           {
-            rule_set = "rkn";
+            rule_set = "adblock";
+            server = "dns-block";
+          }
+          {
             query_type = [ "A" "AAAA" ];
             server = "dns-fakeip";
           }
         ];
         servers = [
-          # upstream dns
           {
+            # upstream dns
             address = "127.0.0.1";
             tag = "dns-coredns";
             detour = "direct";
@@ -50,34 +58,13 @@ in {
           }
         ];
         
-        # "fake ip" setup.
-        # setup for keenetic:
-        # 1. create a proxy outbound (see https://help.keenetic.com/hc/ru/articles/7474374790300)
-        # 2. create a static route for v4, can be done via web ui: Static Routes > Create, Route type = Route to network,
-        #    Destination network address & Subnet mask – from `inet4_range`, interface = [our proxy]
-        # 3. create a static route for v6, can be done via telnet: `ipv6 route [inet6_range] Proxy0` (interface name may differ)
-        # 4. set up keenetic to use our dns server: 
-        # 4.1. setup opkg
-        # 4.2. install dnsmasq
-        # 4.3. put something along this in /opt/etc/dnsmasq.conf:
-        #     no-resolv
-        #     bind-dynamic
-        #     listen-address=127.0.0.1
-        #     listen-address=10.42.0.1
-        #     except-interface=lo
-        #     cache-size=2500
-        #     port=53
-        #     
-        #     server=10.42.0.2#5353 # <- ip of the server
-        #     server=8.8.8.8
-        #     strict-order
-        # 4.4. run `opkg dns-override` via telnet
-        # 4.5. set up the router as the only dns server in dhcp settings
         fakeip = {
           enabled = true;
           inet4_range = "10.224.0.0/11";
           inet6_range = "fd3e:dead:dead::/48";
         };
+        # important for fakeip to work, otherwise cache from upstream gets mixed up with fakeip cache
+        independent_cache = true;
       };
 
       inbounds = [
@@ -92,6 +79,23 @@ in {
           type = "mixed";
           listen = "0.0.0.0";
           listen_port = 7890;
+        }
+        {
+          tag = "personal-in";
+          type = "mixed";
+          listen = "127.0.0.1";
+          listen_port = 7891;
+        }
+        {
+          # sing-box doesn't properly support udp over socks, so we use
+          # xkeen on router side with a minimal config to connect to this
+          # sing-box instance via plain ss, and all further routing/proxying is done here.
+          tag = "router-in";
+          type = "shadowsocks";
+          listen = "0.0.0.0";
+          listen_port = 7899;
+          method = "none";
+          password = "";
         }
       ];
 
@@ -141,35 +145,94 @@ in {
           uuid._secret = secrets.file config "madohomu-singbox-koi-uuid";
         }
         {
-          tag = "auto";
+          # thanks kamillaova
+          tag = "xtls-sakura";
+          flow = "xtls-rprx-vision";
+          server._secret = secrets.file config "vless-sakura-ip";
+          server_port = 443;
+          tls = {
+            alpn = [ "h2" ];
+            enabled = true;
+            reality = {
+              enabled = true;
+              public_key._secret = secrets.file config "vless-sakura-pk";
+              short_id._secret = secrets.file config "vless-sakura-sid";
+            };
+            server_name = "telegram.org";
+            utls = { enabled = true; fingerprint = "edge"; };
+          };
+          type = "vless";
+          uuid._secret = secrets.file config "vless-sakura-uuid";
+        }
+        {
+          tag = "personal-proxy";
           type = "urltest";
           outbounds = [
             "xtls-madoka"
             "xtls-homura"
           ];
         }
+        {
+          tag = "final";
+          type = "selector";
+          outbounds = [
+            "xtls-madoka"
+            "xtls-homura"
+            "xtls-sakura"
+            "direct"
+          ];
+          default = "xtls-sakura";
+        }
       ];
 
       route = {
-        final = "auto";
+        final = "final";
         rules = [
           {
             inbound = [ "dns-in" ];
             outbound = "dns-out";
           }
           {
-            outbound = "dns-out";
-            port = [ 53 ];
+            inbound = [ "personal-in" ];
+            outbound = "personal-proxy";
+          }
+          {
+            # bypass proxy for...
+            domain = [
+              # most of these can be removed once we update to 1.9.0 (https://sing-box.sagernet.org/migration/#domain_suffix-behavior-update)
+              "soundcloud.com"
+              "youtube.com"
+              "yandex-team.ru"
+              "gosuslugi.ru"
+              "mos.ru"
+              "antizapret.prostovpn.org"
+            ];
+            domain_suffix = [
+              ".soundcloud.com" # russian ips don't have ads
+              ".youtube.com" # russian ips don't have ads
+              ".yandex.net"
+              ".yandex-team.ru"
+              ".vk.com"
+              ".gosuslugi.ru"
+              ".mos.ru"
+              ".stupid.fish"
+            ];
+            domain_keyword = [
+              ".aki-game.net" # wuthering waves
+              ".aki-game.com" # wuthering waves
+            ];
+            inbound = [ "router-in" ]; # if we are connected via some other inbound, we want to proxy everything.
+            outbound = "direct";
           }
         ];
 
         rule_set = [
           {
-            tag = "rkn";
+            tag = "adblock";
             format = "binary";
 
             type = "remote";
-            url = "https://github.com/teidesu/rkn-singbox/raw/ruleset/rkn-ruleset.srs";
+            url = "https://adrules.top/adrules-singbox.srs";
           }
         ];
       };
@@ -180,14 +243,15 @@ in {
           store_fakeip = true; 
         };
 
-        # clash_api = {
-        #   external_controller = "127.0.0.1:9090";
-        #   external_ui = "dashboard";
-        # };
+        clash_api = {
+          # no secret because it's only available for nat so who cares
+          external_controller = "0.0.0.0:7900";
+          external_ui = "dashboard";
+        };
       };
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 5353 7890 ];
-  networking.firewall.allowedUDPPorts = [ 5353 ]; 
+  networking.firewall.allowedTCPPorts = [ 5353 7890 7899 7900 ];
+  networking.firewall.allowedUDPPorts = [ 5353 7899 ]; 
 }
