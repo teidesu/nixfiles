@@ -67,6 +67,28 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "New Brave tab",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "n",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "option",
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "osascript /Users/teidesu/.config/new-brave-tab.scpt"
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
                     }
                 ]
             },

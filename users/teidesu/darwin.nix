@@ -45,5 +45,6 @@
 
     home.file.".config/alacritty/alacritty.toml".source = ./assets/alacritty.toml;
     home.file.".config/karabiner/karabiner.json".source = ./assets/karabiner.json;
+    home.file.".config/new-brave-tab.scpt".source = ./assets/new-brave-tab.scpt;
   };
 }
