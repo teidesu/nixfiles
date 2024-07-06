@@ -3,6 +3,9 @@ normal = { family = "IosevkaSS05 Nerd Font", style = "Light" }
 size = 13
 builtin_box_drawing = false
 
+[shell]
+program = "/etc/profiles/per-user/teidesu/bin/fish"
+
 [window]
 blur = true
 opacity = 0.7

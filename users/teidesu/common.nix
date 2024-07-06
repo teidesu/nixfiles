@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }: {
   imports = [
     inputs.nix-index-database.hmModules.nix-index
-    ./zsh.nix
+    ./fish.nix
     ./git.nix
     ./ssh.nix
   ];
@@ -18,6 +18,9 @@
     micro
     carapace
     nil
+    eza
+    bat
+    atuin
     inputs.agenix.packages.${system}.default
   ];
 }

@@ -1,5 +1,6 @@
 { 
   home ? {},
+  pkgs,
   ...
 }:
 
@@ -11,6 +12,7 @@
 
   users.users.teidesu = {
     home = "/Users/teidesu";
+    shell = pkgs.zsh;
   };
 
   age.identityPaths = [

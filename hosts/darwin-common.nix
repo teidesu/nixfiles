@@ -17,10 +17,12 @@
     };
 
     settings.nix-path = [ "nixpkgs=flake:nixpkgs" ];
+    settings.sandbox = "relaxed";
   };
 
   services.nix-daemon.enable = true;
   # nixpkgs.flake.source = lib.mkForce null;
 
   security.pam.enableSudoTouchIdAuth = true;
+  programs.fish.enable = true;
 }
