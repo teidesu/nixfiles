@@ -38,9 +38,6 @@
 
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-
-    disko.url = "github:nix-community/disko";
-    disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -52,7 +49,6 @@
     , bootspec-secureboot
     , home-manager
     , nix-darwin
-    , disko
     , ...
     }:
     let
