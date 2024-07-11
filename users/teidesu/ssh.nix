@@ -31,6 +31,14 @@ in {
         identityFile = "~/.ssh/ssh.pub";
       };
     } // (lib.optionalAttrs isDarwin {
+
+      # orbstack host
+      "orb" = {
+        hostname = "127.0.0.1";
+        port = 32222;
+        identityFile = "~/.orbstack/ssh/id_ed25519";
+        identitiesOnly = true;
+      };
       # 1password ssh agent
       "*" = {
         extraOptions = {
