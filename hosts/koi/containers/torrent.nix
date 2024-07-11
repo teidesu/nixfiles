@@ -2,10 +2,6 @@
 let
   containers = (import (abs "lib/containers.nix") inputs);
   secrets = import (abs "lib/secrets.nix");
-  vueTorrent = pkgs.fetchurl {
-    url = "https://github.com/WDaan/VueTorrent/releases/download/v2.9.0/vuetorrent.zip";
-    hash = "sha256-XrRfgxmRkbyi8FMXL6Pjltyawzr4SS2Gb4/Kz38tnkk=";
-  };
 
   dlWebhook = secrets.mount config "qbt-dl-webhook";
 in
@@ -24,8 +20,6 @@ in
         imports = [
           (import (abs "services/qbittorrent.nix") inputs {
             port = 80;
-            customFrontend = vueTorrent;
-            customFrontendFolder = "vuetorrent";
             serviceConfig = {
               AmbientCapabilities = "CAP_NET_BIND_SERVICE";
             };
@@ -38,6 +32,10 @@ in
               Preferences = {
                 "WebUI\\Username" = "torrent";
                 "WebUI\\Password_PBKDF2" = "\"@ByteArray(Gi7vRUB4k9veY9rOKmTRzw==:Mt0Dhy7rEV+ynH9+Jvm/UwnsNV1KOOQCY1g0QF4TTR1kvT27drZO/zaebH+LTcB3tT52m2T6eikpHxg8NcmXDg==)\"";
+                "WebUI\\AuthSubnetWhitelist" = "10.42.0.0/16";
+                "WebUI\\AuthSubnetWhitelistEnabled" = "true";
+                "WebUI\\ReverseProxySupportEnabled" = "true";
+                "WebUI\\TrustedReverseProxiesList" = "10.42.0.2";
               };
               BitTorrent = {
                 "Session\\DefaultSavePath" = "/mnt/download";
