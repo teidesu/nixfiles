@@ -13,7 +13,7 @@
     "/etc/ssh/agenix_key"
   ];
 
-  programs.zsh.enable = true;
+  programs.fish.enable = true;
   environment.systemPackages = with pkgs; [
     git
     micro

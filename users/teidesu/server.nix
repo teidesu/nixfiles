@@ -4,7 +4,7 @@
   users.users.teidesu = {
     isNormalUser = true;
     extraGroups = [ "wheel" "kvm" "docker" "pipewire" ];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
 
     openssh.authorizedKeys.keyFiles = [
       (abs "ssh/teidesu.pub")
