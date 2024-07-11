@@ -40,6 +40,11 @@
       # too lazy to migrate old logic for now, just error out
       extraConfig = "return 403;";
     };
+    
+    # todo: nixify and open-source teidesu-api
+    locations."/api/".extraConfig = ''
+      proxy_pass http://localhost:8728/;
+    '';
 
     locations."/" = {
       extraConfig = ''
