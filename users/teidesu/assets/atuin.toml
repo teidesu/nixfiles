@@ -1,0 +1,6 @@
+filter_mode_shell_up_key_binding = "directory"
+style = "compact"
+exit_mode = "return-query"
+secrets_filter = false
+show_tabs = false
+enter_accept = true
