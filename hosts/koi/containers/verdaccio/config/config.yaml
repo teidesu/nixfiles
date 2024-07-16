@@ -1,0 +1,38 @@
+# path to a directory with all packages
+storage: /verdaccio/storage
+
+web:
+  enable: true
+  title: alina's personal registry
+  primary_color: "#be15dc"
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+auth:
+  htpasswd:
+    file: /verdaccio/htpasswd
+    max_users: -1 # disable registrations
+security:
+  api:
+    jwt:
+      sign:
+        expiresIn: 60d
+        notBefore: 1
+  web:
+    sign:
+      expiresIn: 60d
+
+packages:
+  '**':
+    access: $all
+    publish: $authenticated
+
+middlewares:
+  audit:
+    enabled: true
+
+logs:
+  - { type: stdout, format: pretty, level: trace }
+

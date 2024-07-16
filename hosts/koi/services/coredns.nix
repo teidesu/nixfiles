@@ -53,6 +53,7 @@ in
       docker:53 {
         import local_only
         docker {
+          domain docker
           compose_domain docker
         }
       }

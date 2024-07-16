@@ -23,6 +23,7 @@
     ./containers/torrent.nix
     ./containers/puffer.nix
     ./containers/vaultwarden.nix
+    ./containers/verdaccio
     ./containers/sharkey
     ./containers/pds
     ./containers/zond
