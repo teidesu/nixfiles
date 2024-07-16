@@ -27,6 +27,7 @@
     ./containers/sharkey
     ./containers/pds
     ./containers/zond
+    ./containers/bots/pcre-sub-bot.nix
     ./vms/hass.nix
     ./vms/bnuuy.nix
     # ./vms/windows.nix
@@ -75,9 +76,8 @@
     allowedBridges = [ "br0" ];
   };
 
-  virtualisation.docker = {
-    enable = true;
-  };
+  virtualisation.docker.enable = true;
+  virtualisation.oci-containers.backend = "docker";
 
   boot.extraModprobeConfig = ''
     options kvm_amd avic=1 nested=0
