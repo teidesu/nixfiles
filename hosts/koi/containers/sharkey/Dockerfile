@@ -1,6 +1,6 @@
 # based on https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/Dockerfile
 ARG NODE_VERSION=20.12.2-alpine3.19
-ARG COMMIT=717696c4728d2e507ddfbd0e4890189758ab1087
+ARG COMMIT=c344705d6708fdc725d6122d2b321cb2d01dad4b
 
 FROM node:${NODE_VERSION} as build
 
@@ -38,6 +38,7 @@ RUN git apply /patches/webhook-notification.patch
 # motivation: https://very.stupid.fish/notes/9shhrn2qncid008s
 RUN git apply /patches/index-everything.patch
 RUN git apply /patches/no-remote-users.patch
+RUN git apply /patches/no-xpost-extension.patch
 RUN cp -f /patches/robots.txt packages/backend/assets/robots.txt
 # end patch
 

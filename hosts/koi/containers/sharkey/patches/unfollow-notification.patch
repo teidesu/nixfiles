@@ -39,11 +39,11 @@ index f849e94..9ba8351 100644
 @@ -30,6 +30,7 @@ SPDX-License-Identifier: AGPL-3.0-only
  			}]"
  		> <!-- we re-use t_pollEnded for "edited" instead of making an identical style -->
- 			<i v-if="notification.type === 'follow'" class="ph-plus ph-bold ph-lg"></i>
-+			<i v-else-if="notification.type === 'unfollow'" class="ph-minus ph-bold ph-lg"></i>
- 			<i v-else-if="notification.type === 'receiveFollowRequest'" class="ph-clock ph-bold ph-lg"></i>
- 			<i v-else-if="notification.type === 'followRequestAccepted'" class="ph-check ph-bold ph-lg"></i>
- 			<i v-else-if="notification.type === 'renote'" class="ph-rocket-launch ph-bold ph-lg"></i>
+ 			<i v-if="notification.type === 'follow'" class="ti ti-plus"></i>
++			<i v-else-if="notification.type === 'unfollow'" class="ti ti-minus"></i>
+ 			<i v-else-if="notification.type === 'receiveFollowRequest'" class="ti ti-clock"></i>
+ 			<i v-else-if="notification.type === 'followRequestAccepted'" class="ti ti-check"></i>
+ 			<i v-else-if="notification.type === 'renote'" class="ti ti-repeat"></i>
 @@ -61,6 +62,7 @@ SPDX-License-Identifier: AGPL-3.0-only
  			<span v-else-if="notification.type === 'achievementEarned'">{{ i18n.ts._notification.achievementEarned }}</span>
  			<span v-else-if="notification.type === 'test'">{{ i18n.ts._notification.testNotification }}</span>

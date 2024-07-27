@@ -1,7 +1,7 @@
 --- a/packages/backend/src/server/web/views/base.pug
 +++ b/packages/backend/src/server/web/views/base.pug
 @@ -44,5 +44,6 @@
- 		link(rel='stylesheet' href='/static-assets/fonts/sharkey-icons/style.css')
+ 		link(rel='stylesheet' href=`/static-assets/fonts/sharkey-icons/style.css?version=${version}`)
  		link(rel='modulepreload' href=`/vite/${clientEntry.file}`)
 +		script(src='https://zond.tei.su/script.js' data-website-id="9629ae3b-b086-4be1-acd2-82e2a4a58c2a")
  

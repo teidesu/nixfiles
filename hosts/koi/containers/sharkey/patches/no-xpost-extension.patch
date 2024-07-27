@@ -1,0 +1,242 @@
+diff --git a/packages/backend/migration/1722103475000-no-xpost.js b/packages/backend/migration/1722103475000-no-xpost.js
+new file mode 100644
+index 0000000..8818c37
+--- /dev/null
++++ b/packages/backend/migration/1722103475000-no-xpost.js
+@@ -0,0 +1,16 @@
++/*
++ * SPDX-FileCopyrightText: syuilo and misskey-project
++ * SPDX-License-Identifier: AGPL-3.0-only
++ */
++
++export class NoXpost1722103475000 {
++    name = 'NoXpost1722103475000'
++
++    async up(queryRunner) {
++        await queryRunner.query(`ALTER TABLE "note" ADD "noXpost" boolean NOT NULL DEFAULT false`);
++    }
++
++    async down(queryRunner) {
++        await queryRunner.query(`ALTER TABLE "note" DROP COLUMN "noXpost"`);
++    }
++}
+diff --git a/packages/backend/src/core/NoteCreateService.ts b/packages/backend/src/core/NoteCreateService.ts
+index 41efa76..87a388e 100644
+--- a/packages/backend/src/core/NoteCreateService.ts
++++ b/packages/backend/src/core/NoteCreateService.ts
+@@ -149,6 +149,7 @@ type Option = {
+ 	uri?: string | null;
+ 	url?: string | null;
+ 	app?: MiApp | null;
++	noXpost?: boolean;
+ };
+ 
+ @Injectable()
+@@ -625,6 +626,7 @@ export class NoteCreateService implements OnApplicationShutdown {
+ 			renoteUserId: data.renote ? data.renote.userId : null,
+ 			renoteUserHost: data.renote ? data.renote.userHost : null,
+ 			userHost: user.host,
++			noXpost: data.noXpost,
+ 		});
+ 
+ 		// should really not happen, but better safe than sorry
+diff --git a/packages/backend/src/core/NoteEditService.ts b/packages/backend/src/core/NoteEditService.ts
+index 0cb58d0..00b4be3 100644
+--- a/packages/backend/src/core/NoteEditService.ts
++++ b/packages/backend/src/core/NoteEditService.ts
+@@ -141,6 +141,7 @@ type Option = {
+ 	app?: MiApp | null;
+ 	updatedAt?: Date | null;
+ 	editcount?: boolean | null;
++	noXpost?: boolean;
+ };
+ 
+ @Injectable()
+@@ -494,6 +495,7 @@ export class NoteEditService implements OnApplicationShutdown {
+ 				renoteUserId: data.renote ? data.renote.userId : null,
+ 				renoteUserHost: data.renote ? data.renote.userHost : null,
+ 				userHost: user.host,
++				noXpost: data.noXpost,
+ 			});
+ 
+ 			if (data.uri != null) note.uri = data.uri;
+diff --git a/packages/backend/src/core/activitypub/ApRendererService.ts b/packages/backend/src/core/activitypub/ApRendererService.ts
+index 90784fd..0f9769f 100644
+--- a/packages/backend/src/core/activitypub/ApRendererService.ts
++++ b/packages/backend/src/core/activitypub/ApRendererService.ts
+@@ -467,6 +467,7 @@ export class ApRendererService {
+ 			attachment: files.map(x => this.renderDocument(x)),
+ 			sensitive: note.cw != null || files.some(file => file.isSensitive),
+ 			tag,
++			'desu:no-xpost': note.noXpost,
+ 			...asPoll,
+ 		};
+ 	}
+@@ -759,6 +760,7 @@ export class ApRendererService {
+ 			attachment: files.map(x => this.renderDocument(x)),
+ 			sensitive: note.cw != null || files.some(file => file.isSensitive),
+ 			tag,
++			'desu:no-xpost': note.noXpost,
+ 			...asPoll,
+ 		};
+ 	}
+diff --git a/packages/backend/src/core/activitypub/type.ts b/packages/backend/src/core/activitypub/type.ts
+index 8edd8a1..4518b27 100644
+--- a/packages/backend/src/core/activitypub/type.ts
++++ b/packages/backend/src/core/activitypub/type.ts
+@@ -122,6 +122,7 @@ export interface IPost extends IObject {
+ 	quoteUrl?: string;
+ 	quoteUri?: string;
+ 	updated?: string;
++	'desu:no-xpost'?: boolean;
+ }
+ 
+ export interface IQuestion extends IObject {
+diff --git a/packages/backend/src/models/Note.ts b/packages/backend/src/models/Note.ts
+index b11e2ec..8cf6787 100644
+--- a/packages/backend/src/models/Note.ts
++++ b/packages/backend/src/models/Note.ts
+@@ -235,6 +235,11 @@ export class MiNote {
+ 		comment: '[Denormalized]',
+ 	})
+ 	public renoteUserHost: string | null;
++
++	@Column('boolean', {
++		default: false,
++	})
++	public noXpost: boolean;
+ 	//#endregion
+ 
+ 	constructor(data: Partial<MiNote>) {
+diff --git a/packages/backend/src/server/api/endpoints/notes/create.ts b/packages/backend/src/server/api/endpoints/notes/create.ts
+index 626f03b..451f2d8 100644
+--- a/packages/backend/src/server/api/endpoints/notes/create.ts
++++ b/packages/backend/src/server/api/endpoints/notes/create.ts
+@@ -155,6 +155,7 @@ export const paramDef = {
+ 		noExtractMentions: { type: 'boolean', default: false },
+ 		noExtractHashtags: { type: 'boolean', default: false },
+ 		noExtractEmojis: { type: 'boolean', default: false },
++		noXpost: { type: 'boolean', default: false },
+ 		replyId: { type: 'string', format: 'misskey:id', nullable: true },
+ 		renoteId: { type: 'string', format: 'misskey:id', nullable: true },
+ 		channelId: { type: 'string', format: 'misskey:id', nullable: true },
+@@ -396,6 +397,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
+ 					apMentions: ps.noExtractMentions ? [] : undefined,
+ 					apHashtags: ps.noExtractHashtags ? [] : undefined,
+ 					apEmojis: ps.noExtractEmojis ? [] : undefined,
++					noXpost: ps.noXpost,
+ 				});
+ 
+ 				return {
+diff --git a/packages/backend/src/server/api/endpoints/notes/edit.ts b/packages/backend/src/server/api/endpoints/notes/edit.ts
+index 835cbc1..ee2c787 100644
+--- a/packages/backend/src/server/api/endpoints/notes/edit.ts
++++ b/packages/backend/src/server/api/endpoints/notes/edit.ts
+@@ -203,6 +203,7 @@ export const paramDef = {
+ 		noExtractMentions: { type: 'boolean', default: false },
+ 		noExtractHashtags: { type: 'boolean', default: false },
+ 		noExtractEmojis: { type: 'boolean', default: false },
++		noXpost: { type: 'boolean', default: false },
+ 		replyId: { type: 'string', format: 'misskey:id', nullable: true },
+ 		renoteId: { type: 'string', format: 'misskey:id', nullable: true },
+ 		channelId: { type: 'string', format: 'misskey:id', nullable: true },
+@@ -447,6 +448,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
+ 					apMentions: ps.noExtractMentions ? [] : undefined,
+ 					apHashtags: ps.noExtractHashtags ? [] : undefined,
+ 					apEmojis: ps.noExtractEmojis ? [] : undefined,
++					noXpost: ps.noXpost,
+ 				});
+ 
+ 				return {
+diff --git a/packages/frontend/src/components/MkPostForm.vue b/packages/frontend/src/components/MkPostForm.vue
+index 57ed045..0d71611 100644
+--- a/packages/frontend/src/components/MkPostForm.vue
++++ b/packages/frontend/src/components/MkPostForm.vue
+@@ -203,6 +203,7 @@ const recentHashtags = ref(JSON.parse(miLocalStorage.getItem('hashtags') ?? '[]'
+ const imeText = ref('');
+ const showingOptions = ref(false);
+ const textAreaReadOnly = ref(false);
++const noXpost = ref(false);
+ 
+ const draftKey = computed((): string => {
+ 	let key = props.channel ? `channel:${props.channel.id}` : '';
+@@ -471,6 +472,7 @@ function setVisibility() {
+ 
+ 	os.popup(defineAsyncComponent(() => import('@/components/MkVisibilityPicker.vue')), {
+ 		currentVisibility: visibility.value,
++		currentNoXpost: noXpost.value,
+ 		isSilenced: $i.isSilenced,
+ 		localOnly: localOnly.value,
+ 		src: visibilityButton.value,
+@@ -482,6 +484,9 @@ function setVisibility() {
+ 				defaultStore.set('visibility', visibility.value);
+ 			}
+ 		},
++		changeNoXpost: v => {
++			noXpost.value = v;
++		},
+ 	}, 'closed');
+ }
+ 
+@@ -810,6 +815,7 @@ async function post(ev?: MouseEvent) {
+ 		visibleUserIds: visibility.value === 'specified' ? visibleUsers.value.map(u => u.id) : undefined,
+ 		reactionAcceptance: reactionAcceptance.value,
+ 		editId: props.editId ? props.editId : undefined,
++		noXpost: noXpost.value,
+ 	};
+ 
+ 	if (withHashtags.value && hashtags.value && hashtags.value.trim() !== '') {
+diff --git a/packages/frontend/src/components/MkVisibilityPicker.vue b/packages/frontend/src/components/MkVisibilityPicker.vue
+index e0aec8b..db25745 100644
+--- a/packages/frontend/src/components/MkVisibilityPicker.vue
++++ b/packages/frontend/src/components/MkVisibilityPicker.vue
+@@ -37,6 +37,9 @@ SPDX-License-Identifier: AGPL-3.0-only
+ 				<span :class="$style.itemDescription">{{ i18n.ts._visibility.specifiedDescription }}</span>
+ 			</div>
+ 		</button>
++		<MkSwitch :modelValue="noXpost" @update:modelValue="noXpostChanged" :disabled="localOnly">
++			do not cross-post
++		</MkSwitch>
+ 	</div>
+ </MkModal>
+ </template>
+@@ -45,12 +48,14 @@ SPDX-License-Identifier: AGPL-3.0-only
+ import { nextTick, shallowRef, ref } from 'vue';
+ import * as Misskey from 'misskey-js';
+ import MkModal from '@/components/MkModal.vue';
++import MkSwitch from '@/components/MkSwitch.vue';
+ import { i18n } from '@/i18n.js';
+ 
+ const modal = shallowRef<InstanceType<typeof MkModal>>();
+ 
+ const props = withDefaults(defineProps<{
+ 	currentVisibility: typeof Misskey.noteVisibilities[number];
++	currentNoXpost: boolean;
+ 	isSilenced: boolean;
+ 	localOnly: boolean;
+ 	src?: HTMLElement;
+@@ -60,10 +65,12 @@ const props = withDefaults(defineProps<{
+ 
+ const emit = defineEmits<{
+ 	(ev: 'changeVisibility', v: typeof Misskey.noteVisibilities[number]): void;
++	(ev: 'changeNoXpost', v: boolean): void;
+ 	(ev: 'closed'): void;
+ }>();
+ 
+ const v = ref(props.currentVisibility);
++const noXpost = ref(props.currentNoXpost)
+ 
+ function choose(visibility: typeof Misskey.noteVisibilities[number]): void {
+ 	v.value = visibility;
+@@ -72,6 +79,11 @@ function choose(visibility: typeof Misskey.noteVisibilities[number]): void {
+ 		if (modal.value) modal.value.close();
+ 	});
+ }
++
++function noXpostChanged(v: boolean): void {
++	noXpost.value = v;
++	emit('changeNoXpost', v);
++}
+ </script>
+ 
+ <style lang="scss" module>
