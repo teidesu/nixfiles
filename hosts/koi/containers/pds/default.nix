@@ -32,7 +32,7 @@ in {
     '';
     
     locations."/" = {
-      proxyPass = "http://pds.pds.docker:3000/";
+      proxyPass = "http://pds.pds.docker:3000$request_uri";
       proxyWebsockets = true;
     };
   };

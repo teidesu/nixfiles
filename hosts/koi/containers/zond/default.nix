@@ -8,7 +8,7 @@
     useACMEHost = "tei.su";
     
     locations."/" = {
-      proxyPass = "http://umami.umami.docker:3000/";
+      proxyPass = "http://umami.umami.docker:3000$request_uri";
     };
   };
 }

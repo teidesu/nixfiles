@@ -58,9 +58,17 @@ in {
       }
     '';
 
+    resolver = {
+      addresses = [ "127.0.0.1" ];
+      ipv6 = false;
+      valid = "30s";
+    };
+    proxyResolveWhileRunning = true;
+
     # declared in the relevant service nixfiles
     # virtualHosts = { ... };
   };
+  systemd.services.nginx.after = [ "coredns.service" ];
 
   security.acme.acceptTerms = true;
   security.acme.defaults.dnsResolver = "8.8.8.8:53"; # coredns tends to cache these too much

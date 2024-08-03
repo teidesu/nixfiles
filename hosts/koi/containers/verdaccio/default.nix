@@ -43,7 +43,7 @@ in {
     useACMEHost = "tei.su";
 
     locations."/" = {
-      proxyPass = "http://verdaccio.docker:4873/";
+      proxyPass = "http://verdaccio.docker:4873$request_uri";
 
       # https://verdaccio.org/docs/reverse-proxy
       extraConfig = ''

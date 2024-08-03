@@ -22,7 +22,7 @@
     '';
     
     locations."/" = {
-      proxyPass = "http://web.sharkey.docker/";
+      proxyPass = "http://web.sharkey.docker$request_uri";
       proxyWebsockets = true;
     };
   };

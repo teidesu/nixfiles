@@ -27,7 +27,7 @@ in
     useACMEHost = "stupid.fish";
 
     locations."/" = {
-      proxyPass = "http://10.42.0.3:8123/";
+      proxyPass = "http://10.42.0.3:8123$request_uri";
       proxyWebsockets = true;
     };
   };

@@ -78,7 +78,7 @@ in
     useACMEHost = "stupid.fish";
 
     locations."/" = {
-      proxyPass = "http://torrent.containers/";
+      proxyPass = "http://torrent.containers$request_uri";
 
       # https://github.com/qbittorrent/qBittorrent/issues/6962
       extraConfig = ''

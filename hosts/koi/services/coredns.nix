@@ -69,6 +69,7 @@ in
   };
 
   systemd.services.coredns = {
+    after = [ "docker.service" "docker.socket" ];
     serviceConfig = {
       DynamicUser = pkgs.lib.mkForce false;
       User = "coredns";

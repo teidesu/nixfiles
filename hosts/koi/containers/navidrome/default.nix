@@ -43,7 +43,7 @@ in {
     useACMEHost = "stupid.fish";
 
     locations."/" = {
-      proxyPass = "http://navidrome.docker:4533/";
+      proxyPass = "http://navidrome.docker:4533$request_uri";
 
       extraConfig = ''
         proxy_buffering off;

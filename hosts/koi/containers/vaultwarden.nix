@@ -48,7 +48,7 @@ in {
     useACMEHost = "tei.su";
 
     locations."/" = {
-      proxyPass = "http://vault.containers/";
+      proxyPass = "http://vault.containers$request_uri";
       proxyWebsockets = true;
     };
   };

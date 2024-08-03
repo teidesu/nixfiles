@@ -37,11 +37,11 @@ in {
     useACMEHost = "tei.su";
 
     locations."/" = {
-      proxyPass = "http://teisu.docker:4321/";
+      proxyPass = "http://teisu.docker:4321$request_uri";
     };
 
     locations."/.well-known/" = {
-      proxyPass = "http://teisu.docker:4321/.well-known/";
+      proxyPass = "http://teisu.docker:4321$request_uri";
       extraConfig = ''
         add_header 'Access-Control-Allow-Origin' '*';
       '';
