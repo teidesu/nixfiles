@@ -125,9 +125,11 @@ let
     };
 
     folders.Public.path = "/mnt/puffer/Public";
+    folders.Downloads.path = "/mnt/puffer/Downloads";
 
     usersFolders = [
       { username = "guest"; folder = "Public"; }
+      { username = "guest"; folder = "Downloads"; }
     ];
   };
 

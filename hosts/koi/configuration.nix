@@ -26,6 +26,7 @@
     ./containers/verdaccio
     ./containers/sharkey
     ./containers/pds
+    ./containers/navidrome
     ./containers/zond
     ./containers/bots/pcre-sub-bot.nix
     ./vms/hass.nix

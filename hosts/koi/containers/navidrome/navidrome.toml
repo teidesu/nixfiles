@@ -1,0 +1,17 @@
+LogLevel = 'DEBUG'
+ScanSchedule = '@every 24h'
+TranscodingCacheSize = '150MiB'
+BaseUrl = 'https://navi.stupid.fish'
+
+EnableSharing = true
+EnableTranscodingConfig = true
+
+UILoginBackgroundUrl = 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png' # idk why lol
+UIWelcomeMessage = 'mrrp meow!'
+
+# values sourced from secret env:
+# ND_LASTFM_APIKEY=
+# ND_LASTFM_SECRET=
+# ND_PASSWORDENCRYPTIONKEY=
+# ND_SPOTIFY_ID=
+# ND_SPOTIFY_SECRET=
