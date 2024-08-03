@@ -18,7 +18,7 @@ in {
   };
 
   virtualisation.oci-containers.containers.teisu = {
-    image = "ghcr.io/teidesu/tei.su:sha-e6a632c@sha256:1f6da149f278d05136155ff9faa858565dcb5ab66c429cba6839f731879fcf71";
+    image = "ghcr.io/teidesu/tei.su:latest";
     volumes = [
       "/srv/teisu:/app/.runtime"
     ];

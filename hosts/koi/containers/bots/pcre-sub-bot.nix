@@ -20,7 +20,7 @@ in {
   };
 
   virtualisation.oci-containers.containers.pcre-sub-bot = {
-    image = "ghcr.io/teidesu/pcre-sub-bot:sha-d010ea7@sha256:d30a1adf852f1953bb4015d55f0031a41bd65657abc4880ecd1dfcb67a77a678";
+    image = "ghcr.io/teidesu/pcre-sub-bot:latest";
     volumes = [
       "/srv/pcre-sub-bot:/app/bot-data"
     ];

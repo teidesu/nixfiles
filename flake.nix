@@ -38,6 +38,9 @@
 
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
+
+    desu-deploy.url = "github:teidesu/desu-deploy/a77b8e790324df51471cf40924acff9643972dfa";
+    desu-deploy.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -49,6 +52,7 @@
     , bootspec-secureboot
     , home-manager
     , nix-darwin
+    , desu-deploy
     , ...
     }:
     let
@@ -94,10 +98,11 @@
     in
     {
       nixosConfigurations = {
-        koi = mkNixosSystem {
+        koi = mkNixosSystem rec {
           system = "x86_64-linux";
           modules = [
             bootspec-secureboot.nixosModules.bootspec-secureboot
+            desu-deploy.nixosModules.${system}.default
             ./hosts/koi/configuration.nix
           ];
         };

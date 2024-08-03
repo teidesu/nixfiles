@@ -93,5 +93,10 @@
     item = "nofile";
     value = "8192";
   }];
+
+  services.desu-deploy = {
+    enable = true;
+    key = builtins.readFile (abs "ssh/desu-deploy.pub");
+  };
 }
 
