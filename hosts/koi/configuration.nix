@@ -28,6 +28,7 @@
     ./containers/pds
     ./containers/navidrome
     ./containers/zond
+    ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
     ./vms/hass.nix
     ./vms/bnuuy.nix

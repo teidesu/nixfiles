@@ -21,7 +21,7 @@
     phpEnv."PATH" = lib.makeBinPath [ pkgs.php ];
   };
 
-  services.nginx.virtualHosts."tei.su" = {
+  services.nginx.virtualHosts."legacy.tei.su" = {
     forceSSL = true;
     useACMEHost = "tei.su";
 
