@@ -12,14 +12,12 @@
 
     ./partials/fde.nix
 
-    ./services/cage.nix
     ./services/coredns.nix
     ./services/sing-box.nix
     ./services/nginx.nix
     ./services/phpfront.nix
     ./services/landing
 
-    ./containers/uxplay.nix
     ./containers/torrent.nix
     ./containers/puffer.nix
     ./containers/vaultwarden.nix
