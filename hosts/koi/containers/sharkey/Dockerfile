@@ -58,8 +58,8 @@ RUN node /patches/patch-locale.js
 
 FROM node:${NODE_VERSION}
 
-ARG UID="991"
-ARG GID="991"
+ARG UID="1104"
+ARG GID="1104"
 
 RUN apk add ffmpeg tini jemalloc \
 	&& corepack enable \

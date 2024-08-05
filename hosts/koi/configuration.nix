@@ -11,11 +11,13 @@
     ./hardware-configuration.nix
 
     ./partials/fde.nix
+    ./partials/docker.nix
 
     ./services/coredns.nix
     ./services/sing-box.nix
     ./services/nginx.nix
     ./services/phpfront.nix
+    ./services/postgresql.nix
     ./services/landing
 
     ./containers/torrent.nix
@@ -75,9 +77,6 @@
     qemu.ovmf.enable = true;
     allowedBridges = [ "br0" ];
   };
-
-  virtualisation.docker.enable = true;
-  virtualisation.oci-containers.backend = "docker";
 
   boot.extraModprobeConfig = ''
     options kvm_amd avic=1 nested=0

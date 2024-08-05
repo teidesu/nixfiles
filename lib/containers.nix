@@ -62,6 +62,7 @@ in
     , env ? { }
     , envFiles ? [ ]
     , extraFlags ? [ ]
+    , after ? [ ]
     }:
     let
       # referencing the file directly would make the service dependant
@@ -92,7 +93,7 @@ in
     {
       systemd.services."docker-compose-${name}" = {
         wantedBy = if autoStart then [ "multi-user.target" ] else [ ];
-        after = [ "docker.service" "docker.socket" ];
+        after = [ "docker.service" "docker.socket" ] ++ after;
         serviceConfig = {
           WorkingDirectory = storeDir;
           ExecStart = "${pkgs.docker}/bin/docker compose ${cmdlineBeforeUp} up ${cmdline}";
@@ -100,4 +101,18 @@ in
         } // (extraConfig.serviceConfig or { });
       } // (builtins.removeAttrs extraConfig [ "serviceConfig" ]);
     };
+  
+  # buildDockerfile = { name, context }: builtins.derivation {
+  #   name = "${name}-image";
+  #   # __noChroot = true;
+  #   src = context;
+  #   builder = pkgs.writeShellScript "builder.sh" (let 
+  #     docker = "${pkgs.docker}/bin/docker";
+  #   in ''
+  #     ${docker} build -t ${name} $src
+  #     ${docker} save -o $out ${name}
+  #     ${docker} image rm ${name}
+  #   '');
+  #   system = pkgs.system;
+  # };
 }

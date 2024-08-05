@@ -2,7 +2,7 @@ url: https://very.stupid.fish
 port: 80
 
 db:
-  host: db
+  host: 172.17.0.1
   port: 5432
   db: misskey
   user: misskey
@@ -11,14 +11,14 @@ db:
 dbReplications: false
 
 redis:
-  host: redis
+  host: sharkey-redis.docker
   port: 6379
 
 #   ┌───────────────────────────┐
 #───┘ MeiliSearch configuration └─────────────────────────────
 
 meilisearch:
-  host: meilisearch
+  host: sharkey-meili.docker
   port: 7700
   apiKey: misskeymeilisearch
   index: ''
@@ -31,7 +31,7 @@ clusterLimit: 2
 
 maxNoteLength: 30000
 
-proxy: 'http://10.42.0.2:7890'
+proxy: 'http://172.17.0.1:7890'
 proxyBypassHosts:
   - api.deepl.com
   - api-free.deepl.com
