@@ -30,6 +30,7 @@
     ./containers/zond
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
+    ./containers/bots/channel-logger-bot.nix
     ./vms/hass.nix
     ./vms/bnuuy.nix
     # ./vms/windows.nix
