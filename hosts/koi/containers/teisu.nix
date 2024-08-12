@@ -38,12 +38,25 @@ in {
 
     locations."/" = {
       proxyPass = "http://teisu.docker:4321$request_uri";
+      extraConfig = ''
+        if ($request_method = MEOW) {
+          rewrite ^ /.meow-proxy last;
+        }
+      '';
     };
 
     locations."/.well-known/" = {
       proxyPass = "http://teisu.docker:4321$request_uri";
       extraConfig = ''
         add_header 'Access-Control-Allow-Origin' '*';
+      '';
+    };
+
+    locations."/.meow-proxy" = {
+      proxyPass = "http://teisu.docker:4321/api/meow";
+      extraConfig = ''
+        proxy_method GET;
+        internal;
       '';
     };
   };
