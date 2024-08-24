@@ -20,6 +20,9 @@
   users.users.root.openssh.authorizedKeys.keyFiles = [
     (abs "ssh/teidesu.pub")
   ];
+
+  virtualisation.docker.enable = true;
+  virtualisation.oci-containers.backend = "docker";
   
   system.stateVersion = "23.11";
 }
