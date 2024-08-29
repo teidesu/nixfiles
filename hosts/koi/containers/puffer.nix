@@ -180,5 +180,31 @@ in
     (secrets.declare [ "sftpgo-ed25519" ])
     container
   ];
+
+  services.nginx.virtualHosts."puffer.stupid.fish" = {
+    forceSSL = true;
+    useACMEHost = "stupid.fish";
+
+    locations."/public/" = {
+      extraConfig = ''
+        alias /mnt/puffer/Public/;
+        autoindex on;
+      '';
+    };
+
+    locations."/downloads/" = {
+      extraConfig = ''
+        alias /mnt/puffer/Downloads/;
+        autoindex on;
+      '';
+    };
+
+    locations."= /" = {
+      extraConfig = ''
+        add_header 'Content-Type' 'text/html; charset=utf-8';
+        return 200 '<html><body><h1>🐡 puffer</h1><a href="/public/">public</a><br><a href="/downloads/">downloads</a></body></html>';
+      '';
+    };
+  };
 }
 
