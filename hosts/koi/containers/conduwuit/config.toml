@@ -1,0 +1,85 @@
+# https://conduwuit.puppyirl.gay/configuration.html
+
+[global]
+
+server_name = "stupid.fish"
+sentry = true
+sentry_send_server_name = true
+sentry_traces_sample_rate = 0.01
+sentry_attach_stacktrace = false
+
+
+database_path = "/data"
+database_backend = "rocksdb"
+
+port = 6167
+address = "0.0.0.0"
+max_request_size = 20_000_000
+
+ip_range_denylist = [
+    "127.0.0.0/8",
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16",
+    "100.64.0.0/10",
+    "192.0.0.0/24",
+    "169.254.0.0/16",
+    "192.88.99.0/24",
+    "198.18.0.0/15",
+    "192.0.2.0/24",
+    "198.51.100.0/24",
+    "203.0.113.0/24",
+    "224.0.0.0/4",
+    "::1/128",
+    "fe80::/10",
+    "fc00::/7",
+    "2001:db8::/32",
+    "ff00::/8",
+    "fec0::/10",
+]
+
+
+allow_guest_registration = false
+log_guest_registrations = false
+allow_guests_auto_join_rooms = false
+
+allow_registration = true
+# set via CONDUWUIT_REGISTRATION_TOKEN env var
+# registration_token = "..."
+
+allow_public_room_directory_over_federation = false
+allow_public_room_directory_without_auth = false
+lockdown_public_room_directory = true
+
+allow_device_name_federation = false
+
+url_preview_domain_contains_allowlist = []
+url_preview_domain_explicit_allowlist = [
+    "discord.com",
+    "discord.gg",
+    "t.me",
+    "telegram.me",
+    "fxtwitter.com",
+    "fixupx.com",
+    "twitter.com",
+    "x.com",
+    "instagram.com",
+    "github.com",
+    "youtube.com",
+    "youtu.be",
+]
+url_preview_url_contains_allowlist = []
+url_preview_domain_explicit_denylist = []
+url_preview_max_spider_size = 384_000
+url_preview_check_root_domain = true
+
+allow_profile_lookup_federation_requests = true
+
+new_user_displayname_suffix = ""
+
+media_compat_file_link = false
+
+# we dont have ipv6
+ip_lookup_strategy = 1
+
+# turn is also set up via env var

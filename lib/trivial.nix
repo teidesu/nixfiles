@@ -17,4 +17,8 @@
       };
     in
     "${drv}/${dirName}";
+  
+  yaml2json = file: pkgs.runCommand "yaml2json" { buildInputs = [ pkgs.yq ]; } ''
+    yq -j < ${file} > $out
+  '';
 }

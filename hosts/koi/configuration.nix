@@ -27,6 +27,7 @@
     ./containers/sharkey
     ./containers/pds
     ./containers/navidrome
+    ./containers/conduwuit
     ./containers/zond
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
@@ -91,6 +92,8 @@
     item = "nofile";
     value = "8192";
   }];
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   services.desu-deploy = {
     enable = true;

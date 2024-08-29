@@ -9,7 +9,6 @@ let
     10.42.0.2 koi.stupid.fish
     10.42.0.2 hass.stupid.fish
     10.42.0.2 very.stupid.fish
-    10.42.0.5 puffer.stupid.fish
     10.42.0.8 bnuuy.stupid.fish
     10.42.0.2 puffer.stupid.fish
   '';
