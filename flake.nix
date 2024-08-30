@@ -39,6 +39,9 @@
     nix-index-database.url = "github:nix-community/nix-index-database";
     nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
+
     desu-deploy.url = "github:teidesu/desu-deploy/a77b8e790324df51471cf40924acff9643972dfa";
     desu-deploy.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -53,6 +56,7 @@
     , home-manager
     , nix-darwin
     , desu-deploy
+    , disko
     , ...
     }:
     let
@@ -82,7 +86,7 @@
       }: let 
         specialArgsMerged = specialArgsCommon // specialArgs // {
           pkgs-stable = import nixpkgs-stable {
-            system = "x86_64-linux";
+            inherit system;
             config = { allowUnfree = true; };
           };
         };
@@ -118,6 +122,14 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/madohomu/madoka.nix
+          ];
+        };
+
+        arumi = mkNixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./hosts/arumi/configuration.nix
           ];
         };
       };

@@ -6,10 +6,11 @@ let
   UID = 1100;
 in {
   # we use cf tunnels because 443 port is used by the proxy,
-  # and it's also generally easier
+  # and it's also generally easierbrew install cloudflared && 
+
   imports = [
     (secrets.declare [{
-      name = "madohomu-cf-token";
+      name = "arumi-cf-token";
       owner = "uptime-kuma";
     }])
   ];
@@ -30,7 +31,7 @@ in {
       PGID = builtins.toString UID;
     };
     environmentFiles = [
-      (secrets.file config "madohomu-cf-token")
+      (secrets.file config "arumi-cf-token")
     ];
   };
 

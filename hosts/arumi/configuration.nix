@@ -4,8 +4,16 @@
   imports = [
     (modulesPath + "/profiles/minimal.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./hardware-configuration.nix
+    ./disk-config.nix
+
+    ./services/sing-box.nix
+    ./services/uptime-kuma.nix
   ];
+
+  boot.loader.grub = {
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+  };
 
   boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;

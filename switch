@@ -24,6 +24,13 @@ while [ $# -ne 0 ]; do
             NIX_SSHOPTS="-i $HOME/.ssh/ssh.pub"
             shift
             ;;
+        --build-on-remote)
+            if [ "$remote" == "0" ]; then
+                echo "Cannot build on remote without specifying remote host"
+                exit 1
+            fi
+            args+=("--build-host" "$norm_host")
+            ;;
 		.\#*) flake=$cur; shift;;
         *) echo "Unknown argument: $cur"; exit 1;;
 	esac

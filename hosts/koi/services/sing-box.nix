@@ -6,9 +6,9 @@ let
 in {
   imports = [
     (secrets.declare [ 
-      "madohomu-singbox-pub"
-      "madohomu-singbox-sid"
-      "madohomu-singbox-koi-uuid"
+      "arumi-singbox-pub"
+      "arumi-singbox-sid"
+      "arumi-singbox-koi-uuid"
       "vless-sakura-ip"
       "vless-sakura-pk"
       "vless-sakura-sid"
@@ -33,10 +33,10 @@ in {
       outbounds = [
         { tag = "direct"; type = "direct"; }
         {
-          tag = "xtls-madoka";
+          tag = "xtls-arumi";
           type = "vless";
           flow = "xtls-rprx-vision";
-          server = secretsUnsafe.readUnsafe "madoka-ip";
+          server = secretsUnsafe.readUnsafe "arumi-ip";
           server_port = 443;
           domain_strategy = "";
           packet_encoding = "";
@@ -46,33 +46,12 @@ in {
             server_name = "updates.cdn-apple.com";
             reality = {
               enabled = true;
-              public_key._secret = secrets.file config "madohomu-singbox-pub";
-              short_id._secret = secrets.file config "madohomu-singbox-sid";
+              public_key._secret = secrets.file config "arumi-singbox-pub";
+              short_id._secret = secrets.file config "arumi-singbox-sid";
             };
             utls = { enabled = true; fingerprint = "edge"; };
           };
-          uuid._secret = secrets.file config "madohomu-singbox-koi-uuid";
-        }
-        {
-          tag = "xtls-homura";
-          type = "vless";
-          flow = "xtls-rprx-vision";
-          server = secretsUnsafe.readUnsafe "homura-ip";
-          server_port = 443;
-          domain_strategy = "";
-          packet_encoding = "";
-          tls = {
-            enabled = true;
-            alpn = [ "h2" ];
-            server_name = "updates.cdn-apple.com";
-            reality = {
-              enabled = true;
-              public_key._secret = secrets.file config "madohomu-singbox-pub";
-              short_id._secret = secrets.file config "madohomu-singbox-sid";
-            };
-            utls = { enabled = true; fingerprint = "edge"; };
-          };
-          uuid._secret = secrets.file config "madohomu-singbox-koi-uuid";
+          uuid._secret = secrets.file config "arumi-singbox-koi-uuid";
         }
         {
           # thanks kamillaova
@@ -98,9 +77,8 @@ in {
           tag = "final";
           type = "urltest";
           outbounds = [
+            "xtls-arumi"
             "xtls-sakura"
-            "xtls-madoka"
-            "xtls-homura"
           ];
         }
       ];

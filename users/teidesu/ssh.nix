@@ -21,6 +21,7 @@ in {
     matchBlocks = {
       madoka.hostname = secrets.readUnsafe "madoka-ip";
       homura.hostname = secrets.readUnsafe "homura-ip";
+      arumi.hostname = secrets.readUnsafe "arumi-ip";
 
       koi = {
         hostname = "10.42.0.2";
@@ -31,7 +32,6 @@ in {
         identityFile = "~/.ssh/ssh.pub";
       };
     } // (lib.optionalAttrs isDarwin {
-
       # orbstack host
       "orb" = {
         hostname = "127.0.0.1";
