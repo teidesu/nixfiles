@@ -141,9 +141,9 @@
           ];
         };
 
-        airi = mkDarwinSystem {
+        sumire = mkDarwinSystem {
           modules = [
-            ./hosts/airi/configuration.nix
+            ./hosts/sumire/configuration.nix
           ];
         };
       };

@@ -60,7 +60,7 @@ rec {
     if [ ${condition} ]; then
       ${download { inherit url params; }}
       ${withMountedDmg "$DOWNLOADED_FILE" ''
-        installer -pkg "$DMG_MOUNTPOINT/"${lib.escapeShellArg filename} -target /
+        sudo /usr/sbin/installer -pkg "$DMG_MOUNTPOINT/"${lib.escapeShellArg filename} -target /
       ''}
       rm -rf $DOWNLOADED_FILE
     fi

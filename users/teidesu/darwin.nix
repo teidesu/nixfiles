@@ -40,6 +40,7 @@
       imagemagick
       rustup
       yt-dlp
+      cloudflared
       (python311.withPackages (ps: with ps; [
         pipx
       ]))

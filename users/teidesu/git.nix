@@ -12,6 +12,11 @@ in {
       signByDefault = true;
     };
 
+    aliases = {
+      stash-staged = "stash push -S";
+      sign-last = "commit --amend --no-edit -S";
+    };
+
     extraConfig = {
       gpg.format = "ssh";
       "gpg \"ssh\"" = if isDarwin then {

@@ -20,7 +20,7 @@
         snipaste
         nekoray
     ]))
-    (import (abs "users/teidesu/darwin.nix") {})
+    (import (abs "users/teidesu/darwin.nix") inputs)
   ];
 
   system.stateVersion = 4; 
