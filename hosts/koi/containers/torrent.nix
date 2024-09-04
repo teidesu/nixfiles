@@ -55,7 +55,7 @@ in
               };
               AutoRun = {
                 enabled = "true";
-                program = "curl \\\"%DL_WEBHOOK%\\\" -X POST -d \\\"%N\\\"";
+                program = "/run/current-system/sw/bin/curl \\\"%DL_WEBHOOK%\\\" -X POST -d \\\"%N\\\"";
               };
             };
           })
