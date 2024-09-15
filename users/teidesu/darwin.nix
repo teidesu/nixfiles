@@ -41,6 +41,8 @@
       rustup
       yt-dlp
       cloudflared
+      sshfs
+      sshpass
       (python311.withPackages (ps: with ps; [
         pipx
       ]))

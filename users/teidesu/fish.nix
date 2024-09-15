@@ -124,6 +124,7 @@ in {
       fish_add_path ~/.cargo/bin
       fish_add_path ~/.bun/bin
       fish_add_path ~/.deno/bin
+      fish_add_path ./node_modules/.bin
     '';
   };
 
