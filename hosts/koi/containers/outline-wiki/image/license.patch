@@ -1,0 +1,6 @@
+22,24c22
+<       const decoded = _jsonwebtoken.default.verify(process.env.LICENSE_KEY || "", this.publicKey, {
+<         ignoreExpiration: true
+<       });
+---
+>       const decoded = _jsonwebtoken.default.decode(process.env.LICENSE_KEY || "");

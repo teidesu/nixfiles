@@ -29,6 +29,8 @@
     ./containers/navidrome
     ./containers/conduwuit
     ./containers/zond
+    ./containers/authentik
+    ./containers/outline-wiki
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
     ./containers/bots/channel-logger-bot.nix
