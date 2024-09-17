@@ -21,8 +21,8 @@
     ./services/landing
 
     ./containers/torrent.nix
-    ./containers/puffer.nix
     ./containers/vaultwarden.nix
+    ./containers/sftpgo
     ./containers/verdaccio
     ./containers/sharkey
     ./containers/pds
