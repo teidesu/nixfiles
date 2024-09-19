@@ -4,6 +4,7 @@ let
   secrets = import (abs "lib/secrets.nix");
 
   UID = 1112;
+  WEBDAV_PORT = 16821;
 in {
   imports = [
     (secrets.declare [{
@@ -45,6 +46,9 @@ in {
     environmentFiles = [
       (secrets.file config "sftpgo-env")
     ];
+    ports = [
+      "${builtins.toString WEBDAV_PORT}:80"
+    ];
   };
 
   systemd.tmpfiles.rules = [
@@ -52,17 +56,34 @@ in {
     "d /srv/sftpgo/config 0700 ${builtins.toString UID} ${builtins.toString UID} -"
   ];
 
-  services.nginx.virtualHosts."puffer.stupid.fish" = {
-    forceSSL = true;
-    useACMEHost = "stupid.fish";
+  services.nginx.virtualHosts = {
+    "puffer.stupid.fish" = {
+      forceSSL = true;
+      useACMEHost = "stupid.fish";
 
-    locations."/" = {
-      proxyPass = "http://sftpgo.docker:8080$request_uri";
-      proxyWebsockets = true;
-    };
+      locations."/" = {
+        proxyPass = "http://sftpgo.docker:8080$request_uri";
+        proxyWebsockets = true;
+      };
 
-    locations."/dav/" = {
-      proxyPass = "http://sftpgo.docker:80$request_uri";
+      locations."/dav/" = {
+        proxyPass = "http://sftpgo.docker:80$request_uri";
+      };
     };
   };
+
+  networking.firewall.allowedTCPPorts = [ WEBDAV_PORT ];
+
+  services.avahi.extraServiceFiles.puffer-lan = ''
+    <?xml version="1.0" standalone='no'?>
+    <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+    <service-group>
+      <name>puffer-lan</name>
+      <service>
+        <port>${builtins.toString WEBDAV_PORT}</port>
+        <type>_webdav._tcp</type>
+        <txt-record>path=/dav/</txt-record>
+      </service>
+    </service-group>
+  '';
 }

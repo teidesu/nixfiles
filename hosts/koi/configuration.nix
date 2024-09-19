@@ -12,6 +12,7 @@
 
     ./partials/fde.nix
     ./partials/docker.nix
+    ./partials/avahi.nix
 
     ./services/coredns.nix
     ./services/sing-box.nix
