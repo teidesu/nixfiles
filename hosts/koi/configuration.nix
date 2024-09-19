@@ -32,6 +32,7 @@
     ./containers/zond
     ./containers/authentik
     ./containers/outline-wiki
+    ./containers/siyuan
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
     ./containers/bots/channel-logger-bot.nix

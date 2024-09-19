@@ -1,0 +1,121 @@
+diff --git a/app/src/util/needSubscribe.ts b/app/src/util/needSubscribe.ts
+index 6ba7848..329ef97 100644
+--- a/app/src/util/needSubscribe.ts
++++ b/app/src/util/needSubscribe.ts
+@@ -2,22 +2,9 @@ import {showMessage} from "../dialog/message";
+ import {getCloudURL} from "../config/util/about";
+ 
+ export const needSubscribe = (tip = window.siyuan.languages._kernel[29]) => {
+-    if (window.siyuan.user && (window.siyuan.user.userSiYuanProExpireTime === -1 || window.siyuan.user.userSiYuanProExpireTime > 0)) {
+-        return false;
+-    }
+-    if (tip) {
+-        if (tip === window.siyuan.languages._kernel[29] && window.siyuan.config.system.container === "ios") {
+-            showMessage(window.siyuan.languages._kernel[122]);
+-        } else {
+-            if (tip === window.siyuan.languages._kernel[29]) {
+-                tip = window.siyuan.languages._kernel[29].replace("${url}", getCloudURL("subscribe/siyuan"));
+-            }
+-            showMessage(tip);
+-        }
+-    }
+-    return true;
++    return false
+ };
+ 
+ export const isPaidUser = () => {
+-    return window.siyuan.user && (0 === window.siyuan.user.userSiYuanSubscriptionStatus || 1 === window.siyuan.user.userSiYuanOneTimePayStatus);
++    return true
+ };
+diff --git a/kernel/model/cloud_service.go b/kernel/model/cloud_service.go
+index 6623931..b9e03f0 100644
+--- a/kernel/model/cloud_service.go
++++ b/kernel/model/cloud_service.go
+@@ -33,7 +33,6 @@ import (
+ 	"github.com/siyuan-note/httpclient"
+ 	"github.com/siyuan-note/logging"
+ 	"github.com/siyuan-note/siyuan/kernel/conf"
+-	"github.com/siyuan-note/siyuan/kernel/task"
+ 	"github.com/siyuan-note/siyuan/kernel/util"
+ )
+ 
+@@ -223,37 +222,7 @@ func RefreshCheckJob() {
+ }
+ 
+ func refreshSubscriptionExpirationRemind() {
+-	if subscriptionExpirationReminded {
+-		return
+-	}
+-	subscriptionExpirationReminded = true
+-
+-	if "ios" == util.Container {
+-		return
+-	}
+-
+-	defer logging.Recover()
+ 
+-	if IsSubscriber() && -1 != Conf.GetUser().UserSiYuanProExpireTime {
+-		expired := int64(Conf.GetUser().UserSiYuanProExpireTime)
+-		now := time.Now().UnixMilli()
+-		if now >= expired { // 已经过期
+-			if now-expired <= 1000*60*60*24*2 { // 2 天内提醒 https://github.com/siyuan-note/siyuan/issues/7816
+-				task.AppendAsyncTaskWithDelay(task.PushMsg, 30*time.Second, util.PushErrMsg, Conf.Language(128), 0)
+-			}
+-			return
+-		}
+-		remains := int((expired - now) / 1000 / 60 / 60 / 24)
+-		expireDay := 15 // 付费订阅提前 15 天提醒
+-		if 2 == Conf.GetUser().UserSiYuanSubscriptionPlan {
+-			expireDay = 3 // 试用订阅提前 3 天提醒
+-		}
+-
+-		if 0 < remains && expireDay > remains {
+-			task.AppendAsyncTaskWithDelay(task.PushMsg, 7*time.Second, util.PushErrMsg, fmt.Sprintf(Conf.Language(127), remains), 0)
+-			return
+-		}
+-	}
+ }
+ 
+ func refreshUser() {
+diff --git a/kernel/model/conf.go b/kernel/model/conf.go
+index 3c3add3..a095512 100644
+--- a/kernel/model/conf.go
++++ b/kernel/model/conf.go
+@@ -836,22 +836,11 @@ func InitBoxes() {
+ }
+ 
+ func IsSubscriber() bool {
+-	u := Conf.GetUser()
+-	return nil != u && (-1 == u.UserSiYuanProExpireTime || 0 < u.UserSiYuanProExpireTime) && 0 == u.UserSiYuanSubscriptionStatus
++	return true
+ }
+ 
+ func IsPaidUser() bool {
+-	// S3/WebDAV data sync and backup are available for a fee https://github.com/siyuan-note/siyuan/issues/8780
+-
+-	if IsSubscriber() {
+-		return true
+-	}
+-
+-	u := Conf.GetUser()
+-	if nil == u {
+-		return false
+-	}
+-	return 1 == u.UserSiYuanOneTimePayStatus
++	return true
+ }
+ 
+ const (
+diff --git a/kernel/util/working.go b/kernel/util/working.go
+index c77fe64..573ce64 100644
+--- a/kernel/util/working.go
++++ b/kernel/util/working.go
+@@ -44,7 +44,7 @@ import (
+ var Mode = "prod"
+ 
+ const (
+-	Ver       = "3.1.6"
++	Ver       = "100.3.1.6"
+ 	IsInsider = false
+ )
+ 
