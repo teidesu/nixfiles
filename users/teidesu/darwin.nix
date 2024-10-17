@@ -48,9 +48,17 @@
       ]))
     ];
 
-    home.file.".config/alacritty/alacritty.toml".source = ./assets/alacritty.toml;
-    home.file.".config/karabiner/karabiner.json".source = ./assets/karabiner.json;
-    home.file.".config/new-brave-tab.scpt".source = ./assets/new-brave-tab.scpt;
-    home.file.".config/atuin/config.toml".source = ./assets/atuin.toml;
+    home.file.".config/rio" = {
+      source = ./assets/rio;
+      recursive = true;
+    };
+    home.file.".config/karabiner" = {
+      source = ./assets/karabiner;
+      recursive = true;
+    };
+    home.file.".config/atuin" = {
+      source = ./assets/atuin;
+      recursive = true;
+    };
   };
 }

@@ -83,7 +83,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "osascript /Users/teidesu/.config/new-brave-tab.scpt"
+                                        "shell_command": "osascript /Users/teidesu/.config/karabiner/new-ff-tab.scpt"
                                     }
                                 ],
                                 "type": "basic"

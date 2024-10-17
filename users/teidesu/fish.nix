@@ -81,6 +81,8 @@ in {
       export STARSHIP_CONFIG=${(pkgs.formats.toml {}).generate "starship.toml" starshipConfig}
       eval "$(${pkgs.starship}/bin/starship init fish)"
 
+      export BAT_THEME="ansi"
+
       if command -q carapace
         set -Ux CARAPACE_BRIDGES 'zsh,fish,bash,inshellisense' # optional
         if test ! -f ~/.config/fish/completions/carapace.fish
