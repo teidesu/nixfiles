@@ -12,6 +12,9 @@ let
     10.42.0.8 bnuuy.stupid.fish
     10.42.0.2 puffer.stupid.fish
     10.42.0.2 puffer-webdav.stupid.fish
+    10.42.0.2 lore.stupid.fish
+    10.42.0.2 id.stupid.fish
+    10.42.0.2 siyuan.tei.su
   '';
 
   package = coredns.override {
@@ -45,8 +48,8 @@ in
           reload 0
           fallthrough
         }
-        forward . tls://8.8.8.8 tls://8.8.4.4 tls://2001:4860:4860::8888 tls://2001:4860:4860::8844 {
-          tls_servername dns.google
+        forward . tls://1.1.1.1 tls://1.0.0.1 tls://2606:4700:4700::1111 tls://2606:4700:4700::1001 {
+          tls_servername one.one.one.one
           health_check 5s
         }
       }
