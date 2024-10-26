@@ -32,6 +32,7 @@
     ./containers/zond
     ./containers/kanidm
     ./containers/siyuan
+    ./containers/memos
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
     ./containers/bots/channel-logger-bot.nix

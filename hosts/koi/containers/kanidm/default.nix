@@ -32,7 +32,7 @@ in {
       "${(secrets.file config "kanidm-tls-cert")}:/data/chain.pem"
     ];
     
-    user = "${builtins.toString UID}:60";
+    user = "${builtins.toString UID}";
   };
 
   systemd.tmpfiles.rules = [
