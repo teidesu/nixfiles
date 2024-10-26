@@ -20,7 +20,7 @@ in {
   };
 
   virtualisation.oci-containers.containers.conduwuit = {
-    image = "ghcr.io/girlbossceo/conduwuit:main-28cd784972f9e6e78a77ee54ca07d998ca15a788";
+    image = "ghcr.io/girlbossceo/conduwuit:main-032b199129f8648a77bde285f755a78e9ec349a7";
     volumes = [
       "${./config.toml}:/conduwuit.toml"
       "/srv/conduwuit:/data"
