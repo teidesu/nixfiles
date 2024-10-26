@@ -32,7 +32,14 @@ in {
     "d /srv/teisu 0755 teisu teisu -"
   ];
 
-  services.nginx.virtualHosts."tei.su" = {
+  services.nginx.virtualHosts."tei.su" = let 
+    serveWithTextPlain = {
+      proxyPass = "http://teisu.docker:4321$request_uri";
+      extraConfig = ''
+        add_header 'Content-Type' 'text/plain';
+      '';
+    };
+  in {
     forceSSL = true;
     useACMEHost = "tei.su";
 
@@ -59,5 +66,9 @@ in {
         internal;
       '';
     };
+
+    locations."/keys" = serveWithTextPlain;
+    locations."/keys@ssh" = serveWithTextPlain;
+    locations."/keys@git" = serveWithTextPlain;
   };
 }
