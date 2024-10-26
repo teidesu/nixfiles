@@ -61,6 +61,10 @@ in {
       forceSSL = true;
       useACMEHost = "stupid.fish";
 
+      extraConfig = ''
+        client_max_body_size 25G;
+      '';
+
       locations."/" = {
         proxyPass = "http://sftpgo.docker:8080$request_uri";
         proxyWebsockets = true;
