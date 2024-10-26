@@ -9,7 +9,7 @@ let
 in {
   imports = [
     (secrets.declare [{
-      name = "siyuan-teidesu-authentik-env";
+      name = "siyuan-teidesu-proxy-env";
       owner = "siyuan-teidesu";
     }])
   ];
@@ -30,33 +30,30 @@ in {
     ];
     cmd = [ "--workspace=/data" ];
     environment = {
-      # we manage auth via authentik
+      # we manage auth via openid-proxy
       SIYUAN_ACCESS_AUTH_CODE_BYPASS = "true";
     };
     user = builtins.toString UID;
-  };
-
-  virtualisation.oci-containers.containers.siyuan-teidesu-authentik = {
-    image = "ghcr.io/goauthentik/proxy";
-    environment = {
-      AUTHENTIK_HOST = "https://id.stupid.fish";
-    };
-    user = builtins.toString UID;
-    environmentFiles = [
-      (secrets.file config "siyuan-teidesu-authentik-env")
-    ];
   };
 
   systemd.tmpfiles.rules = [
     "d /srv/siyuan-teidesu 0700 ${builtins.toString UID} ${builtins.toString UID} -"
   ];
 
+  desu.openid-proxy.services.siyuan-teidesu = {
+    clientId = "teidesu-siyuan";
+    domain = "siyuan.tei.su";
+    upstream = "http://siyuan-teidesu.docker:6806";
+    envSecret = "siyuan-teidesu-proxy-env";
+    uid = UID;
+  };
+
   services.nginx.virtualHosts."siyuan.tei.su" = {
     forceSSL = true;
     useACMEHost = "tei.su";
 
     locations."/" = {
-      proxyPass = "http://siyuan-teidesu-authentik.docker:9000$request_uri";
+      proxyPass = "http://siyuan-teidesu-oidc.docker$request_uri";
       proxyWebsockets = true;
     };
   };

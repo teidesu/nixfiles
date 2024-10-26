@@ -30,8 +30,7 @@
     ./containers/navidrome
     ./containers/conduwuit
     ./containers/zond
-    ./containers/authentik
-    ./containers/outline-wiki
+    ./containers/kanidm
     ./containers/siyuan
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
