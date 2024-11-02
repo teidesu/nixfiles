@@ -20,6 +20,7 @@
     ./services/phpfront.nix
     ./services/postgresql.nix
     ./services/landing
+    ./services/terraria.nix
 
     ./containers/torrent.nix
     ./containers/vaultwarden.nix

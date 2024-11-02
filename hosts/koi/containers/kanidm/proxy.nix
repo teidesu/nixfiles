@@ -29,8 +29,9 @@ in {
             default = [];
           };
           uid = mkOption {
-            type = types.int;
+            type = types.nullOr types.int;
             description = "uid of the user that will run the service";
+            default = null;
           };
         };
       }));
@@ -46,7 +47,7 @@ in {
         name = "${name}-oidc";
         value = {
           image = "quay.io/oauth2-proxy/oauth2-proxy:v7.7.1-amd64";
-          user = "${builtins.toString service.uid}";
+          ${if service.uid != null then "user" else null} = "${builtins.toString service.uid}";
           environmentFiles = [
             config.age.secrets.${service.envSecret}.path
           ];

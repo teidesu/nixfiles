@@ -3,6 +3,7 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.trusted-users = [ "@wheel" ];
+  nixpkgs.config.allowUnfree = true;
   # nix.settings.sandbox = false;
 
   time.timeZone = "Europe/Moscow";

@@ -9,6 +9,7 @@ in
   imports = [
     (secrets.declare [
       { name = "qbt-dl-webhook"; mode = "777"; }
+      { name = "torrent-proxy-env"; mode = "777"; }
     ])
     (containers.mkNixosContainer {
       name = "torrent";
@@ -30,12 +31,13 @@ in
             '';
             config = {
               Preferences = {
-                "WebUI\\Username" = "torrent";
-                "WebUI\\Password_PBKDF2" = "\"@ByteArray(Gi7vRUB4k9veY9rOKmTRzw==:Mt0Dhy7rEV+ynH9+Jvm/UwnsNV1KOOQCY1g0QF4TTR1kvT27drZO/zaebH+LTcB3tT52m2T6eikpHxg8NcmXDg==)\"";
-                "WebUI\\AuthSubnetWhitelist" = "10.42.0.0/16";
+                # auth is managed by oidc proxy
+                "WebUI\\AuthSubnetWhitelist" = "0.0.0.0/0"; 
                 "WebUI\\AuthSubnetWhitelistEnabled" = "true";
                 "WebUI\\ReverseProxySupportEnabled" = "true";
                 "WebUI\\TrustedReverseProxiesList" = "10.42.0.2";
+                "WebUI\\HostHeaderValidation" = "false";
+                "WebUI\\CSRFProtection" = "false";
               };
               BitTorrent = {
                 "Session\\DefaultSavePath" = "/mnt/download";
@@ -73,22 +75,19 @@ in
     })
   ];
 
+  desu.openid-proxy.services.torrent = {
+    clientId = "torrent";
+    domain = "torrent.stupid.fish";
+    upstream = "http://torrent.containers";
+    envSecret = "torrent-proxy-env";
+  };
+
   services.nginx.virtualHosts."torrent.stupid.fish" = {
     forceSSL = true;
     useACMEHost = "stupid.fish";
 
     locations."/" = {
-      proxyPass = "http://torrent.containers$request_uri";
-
-      # https://github.com/qbittorrent/qBittorrent/issues/6962
-      extraConfig = ''
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Host $host:$server_port;
-        proxy_hide_header   Referer;
-        proxy_hide_header   Origin;
-        proxy_set_header    Referer           ''';
-        proxy_set_header    Origin            ''';
-      '';
+      proxyPass = "http://torrent-oidc.docker$request_uri";
     };
   };
 }

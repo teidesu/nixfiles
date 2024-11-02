@@ -14,6 +14,7 @@ let
     10.42.0.2 puffer-webdav.stupid.fish
     10.42.0.2 lore.stupid.fish
     10.42.0.2 id.stupid.fish
+    10.42.0.2 pds.stupid.fish
     10.42.0.2 siyuan.tei.su
   '';
 
