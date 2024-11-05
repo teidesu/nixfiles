@@ -60,5 +60,9 @@
       source = ./assets/atuin;
       recursive = true;
     };
+    home.file.".config/linearmouse" = {
+      source = ./assets/linearmouse;
+      recursive = true;
+    };
   };
 }

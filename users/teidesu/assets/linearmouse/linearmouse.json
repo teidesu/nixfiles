@@ -1,0 +1,37 @@
+{
+    "schemes" : [
+      {
+        "if" : {
+          "device" : {
+            "vendorID" : "0x46d",
+            "serialNumber" : "086738673038",
+            "category" : "mouse",
+            "productID" : "0xc084",
+            "productName" : "G102 Prodigy Gaming Mouse"
+          }
+        },
+        "buttons" : {
+          "switchPrimaryButtonAndSecondaryButtons" : false
+        },
+        "scrolling" : {
+          "distance" : {
+            "vertical" : "auto"
+          },
+          "reverse" : {
+            "vertical" : true
+          },
+          "acceleration" : {
+            "vertical" : 1.5
+          },
+          "speed" : {
+            "vertical" : 20
+          }
+        },
+        "pointer" : {
+          "acceleration" : 1,
+          "disableAcceleration" : true
+        }
+      }
+    ],
+    "$schema" : "https:\/\/schema.linearmouse.app\/0.10.0"
+  }
