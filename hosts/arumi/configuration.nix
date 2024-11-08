@@ -8,6 +8,7 @@
 
     ./services/sing-box.nix
     ./services/uptime-kuma.nix
+    ./services/mumble.nix
   ];
 
   boot.loader.grub = {
