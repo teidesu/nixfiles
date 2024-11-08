@@ -31,14 +31,14 @@ in
   services.coredns = {
     enable = true;
     config = ''
-        (local_only) {
-          acl {
-            allow net 127.0.0.0/8 # localhost
-            allow net 172.16.0.0/12 # docker
-            allow net 10.42.0.0/24 # nixos containers
-            block
-          }
+      (local_only) {
+        acl {
+          allow net 127.0.0.0/8 # localhost
+          allow net 172.16.0.0/12 # docker
+          allow net 10.42.0.0/24 # nixos containers
+          block
         }
+      }
 
       .:53 {
         cache

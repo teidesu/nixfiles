@@ -92,6 +92,16 @@ in {
       "CLOUDFLARE_API_KEY_FILE" = config.age.secrets.cloudflare-token.path;
     };
   };
+  security.acme.certs."tei.pet" = {
+    email = "alina@tei.su";
+    group = "nginx";
+    dnsProvider = "cloudflare";
+    extraDomainNames = [ "*.tei.pet" ];
+    credentialFiles = {
+      "CLOUDFLARE_EMAIL_FILE" = config.age.secrets.cloudflare-email.path;
+      "CLOUDFLARE_API_KEY_FILE" = config.age.secrets.cloudflare-token.path;
+    };
+  };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 }

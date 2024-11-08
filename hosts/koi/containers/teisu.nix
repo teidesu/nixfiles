@@ -71,4 +71,15 @@ in {
     locations."/keys@ssh" = serveWithTextPlain;
     locations."/keys@git" = serveWithTextPlain;
   };
+
+  services.nginx.virtualHosts."tei.pet" = {
+    forceSSL = true;
+    useACMEHost = "tei.pet";
+
+    locations."/" = {
+      extraConfig = ''
+        return 301 https://tei.su$request_uri;
+      '';
+    };
+  };
 }

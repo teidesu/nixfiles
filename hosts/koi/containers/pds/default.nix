@@ -20,7 +20,7 @@ in {
   };
 
   virtualisation.oci-containers.containers.bluesky-pds = {
-    image = "ghcr.io/bluesky-social/pds:sha-94a80820872510e65cb8e62e5a78aa6a8d9ad6c9";
+    image = "ghcr.io/bluesky-social/pds:sha-b595125a28368fa52d12d3b6ca265c1bea06977f";
     volumes = [
       "/srv/bluesky-pds/data:/pds"
       "/mnt/puffer/bluesky-pds:/blobstore"
