@@ -28,7 +28,7 @@
     ./containers/verdaccio
     ./containers/sharkey
     ./containers/pds
-    ./containers/navidrome
+    # ./containers/navidrome
     ./containers/conduwuit
     ./containers/zond
     ./containers/kanidm

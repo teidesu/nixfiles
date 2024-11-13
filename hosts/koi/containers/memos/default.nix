@@ -14,10 +14,11 @@ in {
   services.postgresql.ensureDatabases = [ "memos" ];
   desu.postgresql.ensurePasswords.memos = "memos";
 
+  systemd.services.docker-memos.after = [ "postgresql.service" ];
   virtualisation.oci-containers.containers.memos = {
     image = "neosmemo/memos:0.22.5";
     volumes = [
-      "/srv/memos/data:/var/opt/memoss"
+      "/srv/memos/data:/var/opt/memos"
     ];
 
     environment = {

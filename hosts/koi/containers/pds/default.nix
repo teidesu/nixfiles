@@ -23,7 +23,7 @@ in {
     image = "ghcr.io/bluesky-social/pds:sha-b595125a28368fa52d12d3b6ca265c1bea06977f";
     volumes = [
       "/srv/bluesky-pds/data:/pds"
-      "/mnt/puffer/bluesky-pds:/blobstore"
+      "/srv/bluesky-pds/blobstore:/blobstore"
     ];
     environment = {
       PDS_HOSTNAME = "pds.stupid.fish";
@@ -46,8 +46,7 @@ in {
   };
 
   systemd.tmpfiles.rules = [
-    "d /mnt/puffer/bluesky-pds 0700 ${builtins.toString UID} ${builtins.toString UID} -"
-    "d /srv/bluesky-pds/data 0700 ${builtins.toString UID} ${builtins.toString UID} -"
+    "d /srv/bluesky-pds 0700 ${builtins.toString UID} ${builtins.toString UID} -"
   ];
 
   services.nginx.virtualHosts."pds.stupid.fish" = {

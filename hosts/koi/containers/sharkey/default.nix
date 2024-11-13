@@ -12,7 +12,6 @@ in {
   };
 
   systemd.tmpfiles.rules = [
-    "d /mnt/puffer/Sharkey 0777 root root -"
     "d /srv/Sharkey 0777 root root -"
   ];
 
@@ -55,7 +54,7 @@ in {
     dependsOn = [ "sharkey-redis" "sharkey-meili" ];
     image = "local/sharkey";
     volumes = [
-      "/mnt/puffer/Sharkey/files:/sharkey/files"
+      "/srv/Sharkey/files:/sharkey/files"
       "${context}/.config:/sharkey/.config:ro"
     ];
     environment = {
