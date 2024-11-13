@@ -34,6 +34,7 @@
     ./containers/kanidm
     ./containers/siyuan
     ./containers/memos
+    ./containers/wakapi
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
     ./containers/bots/channel-logger-bot.nix
@@ -99,6 +100,7 @@
   }];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.kernelParams = [ "efi_pstore.pstore_disable=0" ];
 
   services.desu-deploy = {
     enable = true;
