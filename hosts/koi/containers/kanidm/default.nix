@@ -24,10 +24,12 @@ in {
   };
 
   virtualisation.oci-containers.containers.kanidm = {
-    image = "kanidm/server:1.3.3";
+    image = "kanidm/server:1.4.2";
     volumes = [
       "/srv/kanidm/data:/data/db"
       "${./server.toml}:/data/server.toml"
+      "${./style.css}:/hpkg/style.css"
+      "${./fish.png}:/hpkg/img/fish.png"
       "${(secrets.file config "kanidm-tls-key")}:/data/key.pem"
       "${(secrets.file config "kanidm-tls-cert")}:/data/chain.pem"
     ];
