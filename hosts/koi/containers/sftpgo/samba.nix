@@ -46,57 +46,54 @@ in
           '';
         };
 
-        services.samba = {
+        services.samba = let 
+          common = {
+            browseable = "yes";
+            "read only" = "yes";
+            "guest ok" = "yes";
+          };
+        in {
           enable = true;
           openFirewall = true;
 
-          securityType = "user";
-          extraConfig = ''
-            workgroup = WORKGROUP
-            server string = puffer
-            netbios name = puffer
-            security = user
-            guest account = smb-guest
-            map to guest = bad user
-            hosts allow = 10.0.0.0/8
-            hosts deny = 0.0.0.0/0
-            inherit permissions = yes
+          settings = {
+            global = {
+              "workgroup" = "WORKGROUP";
+              "server string" = "puffer";
+              "netbios name" = "puffer";
+              "security" = "user";
+              "guest account" = "smb-guest";
+              "map to guest" = "bad user";
+              "hosts allow" = "10.0.0.0/8";
+              "hosts deny" = "0.0.0.0/0";
+              "inherit permissions" = "yes";
 
-            # Performance
-            socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072
-            read raw = yes
-            write raw = yes
-            server signing = no
-            strict locking = no
-            min receivefile size = 16384
-            use sendfile = Yes
-            aio read size = 16384
-            aio write size = 16384
+              # Performance
+              "socket options" = "TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=131072 SO_SNDBUF=131072";
+              "read raw" = "yes";
+              "write raw" = "yes";
+              "server signing" = "no";
+              "strict locking" = "no";
+              "min receivefile size" = "16384";
+              "use sendfile" = "Yes";
+              "aio read size" = "16384";
+              "aio write size" = "16384";
 
-            # Fruit global config
-            fruit:aapl = yes
-            fruit:nfs_aces = no
-            fruit:copyfile = no
-            fruit:model = MacSamba
-          '';
-
-          shares =
-            let
-              common = {
-                browseable = "yes";
-                "read only" = "yes";
-                "guest ok" = "yes";
-              };
-            in
-            {
-              Downloads = common // {
-                path = "/mnt/puffer/Downloads";
-              };
-
-              Public = common // {
-                path = "/mnt/puffer/Public";
-              };
+              # Fruit global config
+              "fruit:aapl" = "yes";
+              "fruit:nfs_aces" = "no";
+              "fruit:copyfile" = "no";
+              "fruit:model" = "MacSamba";
             };
+
+            Downloads = common // {
+              path = "/mnt/puffer/Downloads";
+            };
+
+            Public = common // {
+              path = "/mnt/puffer/Public";
+            };
+          };
         };
       };
 

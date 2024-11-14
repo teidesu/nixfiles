@@ -57,6 +57,12 @@ in
       }
 
       docker:53 {
+        header {
+          response set ra # https://github.com/coredns/coredns/issues/3690#issuecomment-1573865953
+        }
+        template ANY AAAA {
+          rcode NOERROR
+        }
         import local_only
         docker {
           domain docker
