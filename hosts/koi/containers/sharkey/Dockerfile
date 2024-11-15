@@ -1,8 +1,8 @@
 # based on https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/Dockerfile
 ARG NODE_VERSION=20.12.2-alpine3.19
-ARG COMMIT=c344705d6708fdc725d6122d2b321cb2d01dad4b
 
 FROM node:${NODE_VERSION} as build
+
 
 RUN apk add git linux-headers build-base patch
 
@@ -13,6 +13,7 @@ RUN apk add py3-pip py3-setuptools
 RUN corepack enable
 
 # begin fetch
+ARG COMMIT=c344705d6708fdc725d6122d2b321cb2d01dad4b
 RUN git clone https://activitypub.software/TransFem-org/Sharkey.git /sharkey --depth=1 && \
     cd /sharkey && \
     git fetch --depth=1 origin ${COMMIT} && \
@@ -21,6 +22,8 @@ RUN git clone https://activitypub.software/TransFem-org/Sharkey.git /sharkey --d
 # end fetch
 
 WORKDIR /sharkey
+
+RUN echo a 1 && git rev-parse HEAD
  
 RUN pnpm config set fetch-retries 5
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store,sharing=locked \
