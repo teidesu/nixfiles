@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-args=()
+args=("--option" "warn-dirty" "false")
 cmd="switch"
 flake="."
 remote=0
