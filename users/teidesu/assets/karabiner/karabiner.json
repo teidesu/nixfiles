@@ -171,28 +171,6 @@
                             {
                                 "type": "basic",
                                 "from": {
-                                    "key_code": "f19"
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "/Applications/Snipaste.app/Contents/MacOS/Snipaste snip"
-                                    }
-                                ],
-                                "conditions": [
-                                    {
-                                        "type": "device_if",
-                                        "identifiers": [
-                                            {
-                                                "product_id": 49284,
-                                                "vendor_id": 1133
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "basic",
-                                "from": {
                                     "key_code": "q",
                                     "modifiers": {
                                         "mandatory": [
