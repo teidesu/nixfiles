@@ -55,5 +55,13 @@ in {
       proxyPass = "http://bluesky-pds.docker:3000$request_uri";
       proxyWebsockets = true;
     };
+
+    locations."/xrpc/com.atproto.sync.getBlob" = {
+      proxyPass = "http://bluesky-pds.docker:3000$request_uri";
+      extraConfig = ''
+        proxy_hide_header "cache-control";
+        add_header "cache-control" "public, immutable, no-transform, stale-while-revalidate=31536000, max-age=31536000";
+      '';
+    };
   };
 }
