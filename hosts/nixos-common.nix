@@ -1,10 +1,14 @@
 { abs, pkgs, ... }:
 
 {
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.trusted-users = [ "@wheel" ];
+  nix.settings = {
+    trusted-users = [ "@wheel" ];
+    experimental-features = [ "nix-command" "flakes" ];
+    substituters = [
+      "https://cache.kamillaova.dev/?priority=1"
+    ];
+  };
   nixpkgs.config.allowUnfree = true;
-  # nix.settings.sandbox = false;
 
   time.timeZone = "Europe/Moscow";
   i18n.defaultLocale = "en_US.UTF-8";

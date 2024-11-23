@@ -10,6 +10,9 @@
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
+    substituters = [
+      "https://cache.kamillaova.dev/?priority=1"
+    ];
   };
 
   inputs = {
