@@ -100,7 +100,7 @@
   }];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-  boot.kernelParams = [ "efi_pstore.pstore_disable=0" ];
+  boot.kernelParams = [ "kernel.panic=10" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.desu-deploy = {
