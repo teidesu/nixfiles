@@ -22,12 +22,20 @@ in
     };
   };
 
+  desu.secrets.hass-proxy-env = {};
+  desu.openid-proxy.services.hass = {
+    clientId = "hass";
+    domain = "hass.stupid.fish";
+    upstream = "http://10.42.0.3:8123";
+    envSecret = "hass-proxy-env";
+  };
+
   services.nginx.virtualHosts."hass.stupid.fish" = {
     forceSSL = true;
     useACMEHost = "stupid.fish";
 
     locations."/" = {
-      proxyPass = "http://10.42.0.3:8123$request_uri";
+      proxyPass = "http://hass-oidc.docker$request_uri";
       proxyWebsockets = true;
     };
   };
