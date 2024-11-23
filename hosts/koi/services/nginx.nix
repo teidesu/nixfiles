@@ -66,28 +66,27 @@
   systemd.services.nginx.after = [ "coredns.service" ];
 
   security.acme.acceptTerms = true;
-  security.acme.defaults.dnsResolver = "8.8.8.8:53"; # coredns tends to cache these too much
-  security.acme.certs = let 
-    common = {
-      email = "alina@tei.su";
-      group = "nginx";
-      dnsProvider = "cloudflare";
-      credentialFiles = {
-        "CLOUDFLARE_EMAIL_FILE" = config.desu.secrets.cloudflare-email.path;
-        "CLOUDFLARE_API_KEY_FILE" = config.desu.secrets.cloudflare-token.path;
-      };
+  security.acme.defaults = {
+    dnsResolver = "8.8.8.8:53"; # coredns tends to cache these too much
+    email = "alina@tei.su";
+    group = "nginx";
+    dnsProvider = "cloudflare";
+    credentialFiles = {
+      "CLOUDFLARE_EMAIL_FILE" = config.desu.secrets.cloudflare-email.path;
+      "CLOUDFLARE_API_KEY_FILE" = config.desu.secrets.cloudflare-token.path;
     };
-  in {
-    "stupid.fish" = common // {
+  };
+  security.acme.certs = {
+    "stupid.fish" = {
       extraDomainNames = [ "*.stupid.fish" ];
     };
-    "tei.su" = common // {
+    "tei.su" = {
       extraDomainNames = [ "*.tei.su" ];
     };
-    "tei.pet" = common // {
+    "tei.pet" = {
       extraDomainNames = [ "*.tei.pet" ];
     };
-    "s3.stupid.fish" = common // {
+    "s3.stupid.fish" = {
       extraDomainNames = [ "*.s3.stupid.fish" ];
     };
   };
