@@ -1,16 +1,9 @@
-{ abs, config, ... } @ inputs:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1102;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "navidrome-env";
-      owner = "navidrome";
-    }])
-  ];
+  desu.secrets.navidrome-env.owner = "navidrome";
 
   users.groups.navidrome = {};
   users.users.navidrome = {
@@ -29,7 +22,7 @@ in {
       ND_CONFIGFILE = "/navidrome.toml";
     };
     environmentFiles = [
-      (secrets.file config "navidrome-env")
+      config.desu.secrets.navidrome-env.path
     ];
     user = builtins.toString UID;
   };

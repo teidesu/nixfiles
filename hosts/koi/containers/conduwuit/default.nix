@@ -1,17 +1,13 @@
-{ abs, config, ... } @ inputs:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1107;
 in {
   imports = [
-    (secrets.declare [{
-      name = "conduwuit-env";
-      owner = "conduwuit";
-    }])
     ./bridges/telegram
   ];
+
+  desu.secrets.conduwuit-env.owner = "conduwuit";
 
   users.groups.conduwuit = {};
   users.users.conduwuit = {
@@ -29,7 +25,7 @@ in {
       CONDUWUIT_CONFIG = "/conduwuit.toml";
     };
     environmentFiles = [
-      (secrets.file config "conduwuit-env")
+      config.desu.secrets.conduwuit-env.path
     ];
     user = builtins.toString UID;
   };

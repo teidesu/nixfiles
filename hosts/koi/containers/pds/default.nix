@@ -1,17 +1,10 @@
-{ abs, config, pkgs, ... }@inputs:
+{ config, ... }:
 
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1106;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "bluesky-pds-secrets";
-      owner = "bluesky-pds";
-    }])
-  ];
+  desu.secrets.bluesky-pds-secrets.owner = "bluesky-pds";
 
   users.groups.bluesky-pds = {};
   users.users.bluesky-pds = {
@@ -40,7 +33,7 @@ in {
     };
     environmentFiles = [
       # PDS_JWT_SECRET, PDS_ADMIN_PASSWORD, PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX
-      (secrets.file config "bluesky-pds-secrets")
+      config.desu.secrets.bluesky-pds-secrets.path
     ];
     user = builtins.toString UID;
   };

@@ -1,10 +1,8 @@
-{ abs, pkgs, ... }@inputs:
+{ pkgs, ... }:
 
 let 
   UID = 1104;
-  trivial = import (abs "lib/trivial.nix") inputs;
-
-  context = trivial.storeDirectory ./.;
+  context = pkgs.copyPathToStore ./.;
 in {
   users.users.misskey = {
     isNormalUser = true;

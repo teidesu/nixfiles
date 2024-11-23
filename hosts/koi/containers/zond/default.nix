@@ -1,20 +1,9 @@
-{ abs, config, ... }:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1116;
 in {
-  # todo 2: update UMAMI_HOST in teisu-env
-
-  imports = [
-    (secrets.declare [
-      {
-        name = "umami-env";
-        owner = "umami";
-      }
-    ])
-  ];
+  desu.secrets.umami-env.owner = "umami";
 
   users.users.umami = {
     isNormalUser = true;
@@ -39,7 +28,7 @@ in {
     };
 
     environmentFiles = [
-      (secrets.file config "umami-env")
+      config.desu.secrets.umami-env.path
     ];
 
     user = "${builtins.toString UID}";

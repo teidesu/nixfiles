@@ -4,6 +4,7 @@
   imports = [
     (modulesPath + "/profiles/minimal.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
+    (abs "lib/desu")
     ./disk-config.nix
 
     ./services/sing-box.nix

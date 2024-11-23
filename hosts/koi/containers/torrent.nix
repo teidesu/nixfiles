@@ -1,16 +1,12 @@
-{ abs, lib, pkgs, config, ... }@inputs:
+{ abs, pkgs, config, ... }@inputs:
 let
   containers = (import (abs "lib/containers.nix") inputs);
-  secrets = import (abs "lib/secrets.nix");
-
-  dlWebhook = secrets.mount config "qbt-dl-webhook";
 in
 {
+  desu.secrets.qbt-dl-webhook.mode = "777";
+  desu.secrets.torrent-proxy-env.mode = "777";
+  
   imports = [
-    (secrets.declare [
-      { name = "qbt-dl-webhook"; mode = "777"; }
-      { name = "torrent-proxy-env"; mode = "777"; }
-    ])
     (containers.mkNixosContainer {
       name = "torrent";
       ephemeral = false;
@@ -26,7 +22,7 @@ in
             };
             setup = { config, ... }: ''
               mkdir -p /var/lib/qbittorrent/temp
-              dl_webhook=`cat ${dlWebhook.path}`
+              dl_webhook=`cat /mnt/secrets/qbt-dl-webhook`
               sed -i "s|%DL_WEBHOOK%|$dl_webhook|g" ${config}
             '';
             config = {
@@ -71,7 +67,11 @@ in
           hostPath = "/mnt/puffer/Downloads";
           isReadOnly = false;
         };
-      } // (dlWebhook.mounts);
+        "/mnt/secrets/qbt-dl-webhook" = {
+          hostPath = config.desu.secrets.qbt-dl-webhook.path;
+          isReadOnly = true;
+        };
+      };
     })
   ];
 

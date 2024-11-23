@@ -1,16 +1,9 @@
-{ abs, pkgs, config, ... }@inputs:
+{ config, ... }:
 
 let
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1109;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "vaultwarden-env";
-      owner = "vaultwarden";
-    }])
-  ];
+  desu.secrets.vaultwarden-env.owner = "vaultwarden";
 
   virtualisation.oci-containers.containers.vaultwarden = {
     image = "vaultwarden/server:1.32.5-alpine";
@@ -26,7 +19,7 @@ in {
       EXPERIMENTAL_CLIENT_FEATURE_FLAGS = "ssh-key-vault-item,ssh-agent,extension-refresh";
     };
     environmentFiles = [
-      (secrets.file config "vaultwarden-env")
+      config.desu.secrets.vaultwarden-env.path
     ];
     user = builtins.toString UID;
   };

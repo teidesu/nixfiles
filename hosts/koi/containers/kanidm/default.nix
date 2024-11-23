@@ -1,23 +1,15 @@
-{ abs, pkgs, config, ... }@inputs:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1111;
 in {
   imports = [
-    (secrets.declare [
-      {
-        name = "kanidm-tls-key";
-        owner = "kanidm";
-      }
-      {
-        name = "kanidm-tls-cert";
-        owner = "kanidm";
-      }
-    ])
     ./proxy.nix
   ];
+
+  desu.secrets.kanidm-tls-key.owner = "kanidm";
+  desu.secrets.kanidm-tls-cert.owner = "kanidm";
+
   users.users.kanidm = {
     isNormalUser = true;
     uid = UID;
@@ -30,8 +22,8 @@ in {
       "${./server.toml}:/data/server.toml"
       "${./style.css}:/hpkg/style.css"
       "${./fish.png}:/hpkg/img/fish.png"
-      "${(secrets.file config "kanidm-tls-key")}:/data/key.pem"
-      "${(secrets.file config "kanidm-tls-cert")}:/data/chain.pem"
+      "${config.desu.secrets.kanidm-tls-key.path}:/data/key.pem"
+      "${config.desu.secrets.kanidm-tls-cert.path}:/data/chain.pem"
     ];
     
     user = "${builtins.toString UID}";

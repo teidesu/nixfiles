@@ -1,13 +1,8 @@
-{ pkgs, abs, config, ... }@inputs:
+{ config, ... }:
 
-let 
-  secrets = import (abs "lib/secrets.nix");
-in {
-  # sadly due to our network setup we cant properly extract this to a container
-  # not a big deal though, since we only need to run it once
-  imports = [
-    (secrets.declare ["cloudflare-email" "cloudflare-token"])
-  ];
+{
+  desu.secrets.cloudflare-email.owner = "nginx";
+  desu.secrets.cloudflare-token.owner = "nginx";
 
   services.nginx = {
     enable = true;
@@ -78,8 +73,8 @@ in {
       group = "nginx";
       dnsProvider = "cloudflare";
       credentialFiles = {
-        "CLOUDFLARE_EMAIL_FILE" = config.age.secrets.cloudflare-email.path;
-        "CLOUDFLARE_API_KEY_FILE" = config.age.secrets.cloudflare-token.path;
+        "CLOUDFLARE_EMAIL_FILE" = config.desu.secrets.cloudflare-email.path;
+        "CLOUDFLARE_API_KEY_FILE" = config.desu.secrets.cloudflare-token.path;
       };
     };
   in {

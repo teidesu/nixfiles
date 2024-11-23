@@ -1,18 +1,14 @@
-{ pkgs, abs, config, ... }@inputs:
+{ config, ... }: 
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1112;
   WEBDAV_PORT = 16821;
 in {
   imports = [
-    (secrets.declare [{
-      name = "sftpgo-env";
-      owner = "sftpgo";
-    }])
     ./samba.nix
   ];
+
+  desu.secrets.sftpgo-env.owner = "sftpgo";
 
   users.users.sftpgo = {
     isNormalUser = true;
@@ -44,7 +40,7 @@ in {
       SFTPGO_HTTPD__BINDINGS__0__OIDC__IMPLICIT_ROLES = "true";
     };
     environmentFiles = [
-      (secrets.file config "sftpgo-env")
+      config.desu.secrets.sftpgo-env.path
     ];
     ports = [
       "${builtins.toString WEBDAV_PORT}:80"

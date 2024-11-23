@@ -1,20 +1,14 @@
-{ pkgs, abs, config, ... }:
+{ config, ... }:
 
-let
-  secrets = import (abs "lib/secrets.nix");
-  secretsUnsafe = pkgs.callPackage (abs "lib/secrets-unsafe.nix") {};
-in {
-  imports = [
-    (secrets.declare [ 
-      "arumi-singbox-pub"
-      "arumi-singbox-sid"
-      "arumi-singbox-koi-uuid"
-      "vless-sakura-ip"
-      "vless-sakura-pk"
-      "vless-sakura-sid"
-      "vless-sakura-uuid"
-    ])
-  ];
+{
+
+  desu.secrets.arumi-singbox-pub = {};
+  desu.secrets.arumi-singbox-sid = {};
+  desu.secrets.arumi-singbox-koi-uuid = {};
+  desu.secrets.vless-sakura-ip = {};
+  desu.secrets.vless-sakura-pk = {};
+  desu.secrets.vless-sakura-sid = {};
+  desu.secrets.vless-sakura-uuid = {};
 
   services.sing-box = {
     enable = true;
@@ -36,7 +30,7 @@ in {
           tag = "xtls-arumi";
           type = "vless";
           flow = "xtls-rprx-vision";
-          server = secretsUnsafe.readUnsafe "arumi-ip";
+          server = config.desu.readUnsafeSecret "arumi-ip";
           server_port = 443;
           domain_strategy = "";
           packet_encoding = "";
@@ -46,32 +40,32 @@ in {
             server_name = "updates.cdn-apple.com";
             reality = {
               enabled = true;
-              public_key._secret = secrets.file config "arumi-singbox-pub";
-              short_id._secret = secrets.file config "arumi-singbox-sid";
+              public_key._secret = config.desu.secrets.arumi-singbox-pub.path;
+              short_id._secret = config.desu.secrets.arumi-singbox-sid.path;
             };
             utls = { enabled = true; fingerprint = "edge"; };
           };
-          uuid._secret = secrets.file config "arumi-singbox-koi-uuid";
+          uuid._secret = config.desu.secrets.arumi-singbox-koi-uuid.path;
         }
         {
           # thanks kamillaova
           tag = "xtls-sakura";
           flow = "xtls-rprx-vision";
-          server._secret = secrets.file config "vless-sakura-ip";
+          server._secret = config.desu.secrets.vless-sakura-ip.path;
           server_port = 443;
           tls = {
             alpn = [ "h2" ];
             enabled = true;
             reality = {
               enabled = true;
-              public_key._secret = secrets.file config "vless-sakura-pk";
-              short_id._secret = secrets.file config "vless-sakura-sid";
+              public_key._secret = config.desu.secrets.vless-sakura-pk.path;
+              short_id._secret = config.desu.secrets.vless-sakura-sid.path;
             };
             server_name = "telegram.org";
             utls = { enabled = true; fingerprint = "edge"; };
           };
           type = "vless";
-          uuid._secret = secrets.file config "vless-sakura-uuid";
+          uuid._secret = config.desu.secrets.vless-sakura-uuid.path;
         }
         {
           tag = "final";

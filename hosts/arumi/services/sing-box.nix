@@ -1,15 +1,9 @@
-{ config, abs, pkgs, ... }:
+{ config, pkgs, ... }:
 
-let 
-  secrets = import (abs "lib/secrets.nix");
-in {
-  imports = [
-    (secrets.declare [
-      "arumi-singbox-pk"
-      "arumi-singbox-sid"
-      "arumi-singbox-users"
-    ])
-  ];
+{
+  desu.secrets.arumi-singbox-pk = {};
+  desu.secrets.arumi-singbox-sid = {};
+  desu.secrets.arumi-singbox-users = {};
 
   services.sing-box = {
     enable = true;
@@ -31,9 +25,9 @@ in {
             reality = {
               enabled = true;
               handshake = { inherit server; server_port = 443; };
-              private_key._secret = secrets.file config "arumi-singbox-pk";
+              private_key._secret = config.desu.secrets.arumi-singbox-pk.path;
               short_id = [ 
-                { _secret = secrets.file config "arumi-singbox-sid"; }
+                { _secret = config.desu.secrets.arumi-singbox-sid.path; }
               ];
             };
           };
@@ -49,7 +43,7 @@ in {
   systemd.services.sing-box.preStart = let 
     file = "/etc/sing-box/config.json";
   in ''
-    users=$(${pkgs.yaml2json}/bin/yaml2json < ${secrets.file config "arumi-singbox-users"})
+    users=$(${pkgs.yaml2json}/bin/yaml2json < ${config.desu.secrets.arumi-singbox-users.path})
     ${pkgs.jq}/bin/jq --arg users "$users" \
       '.inbounds[0].users = ($users | fromjson | map({ "uuid": ., "flow": "xtls-rprx-vision" }))' \
       ${file} > ${file}.tmp

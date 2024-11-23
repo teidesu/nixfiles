@@ -1,20 +1,13 @@
 { pkgs, abs, config, ... } @ inputs:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-  trivial = import (abs "lib/trivial.nix") inputs;
   env = import (abs "lib/env.nix") inputs;
 
   UID = 1108;
 
   bridgeConfig = pkgs.writeText "config.yaml" (builtins.toJSON (import ./config.nix));
 in {
-  imports = [
-    (secrets.declare [{
-      name = "mautrix-tg-env";
-      owner = "mautrix";
-    }])
-  ];
+  desu.secrets.mautrix-tg-env.owner = "mautrix";
 
   users.groups.mautrix = {};
   users.users.mautrix = {
@@ -41,7 +34,7 @@ in {
     };
     entrypoint = "/entrypoint.sh";
     environmentFiles = [
-      (secrets.file config "mautrix-tg-env")
+      config.desu.secrets.mautrix-tg-env.path
     ];
     user = builtins.toString UID;
   };

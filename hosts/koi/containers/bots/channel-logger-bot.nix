@@ -1,16 +1,9 @@
-{ abs, config, ... }:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1105;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "channel-logger-bot-env";
-      owner = "channel-logger-bot";
-    }])
-  ];
+  desu.secrets.channel-logger-bot-env.owner = "channel-logger-bot";
 
   users.groups.channel-logger-bot = {};
   users.users.channel-logger-bot = {
@@ -25,7 +18,7 @@ in {
       "/srv/channel-logger-bot:/app/bot-data"
     ];
     environmentFiles = [
-      (secrets.file config "channel-logger-bot-env")
+      config.desu.secrets.channel-logger-bot-env.path
     ];
     environment.MTCUTE_LOG_LEVEL = "5";
     user = builtins.toString UID;

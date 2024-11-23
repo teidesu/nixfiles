@@ -1,18 +1,9 @@
-{ abs, pkgs, config, ... }@inputs:
+{ config, ... }: 
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1115;
 in {
-  imports = [
-    (secrets.declare [
-      {
-        name = "wakapi-env";
-        owner = "wakapi";
-      }
-    ])
-  ];
+  desu.secrets.wakapi-env.owner = "wakapi";
 
   users.users.wakapi = {
     isNormalUser = true;
@@ -55,7 +46,7 @@ in {
     };
 
     environmentFiles = [
-      (secrets.file config "wakapi-env")
+      config.desu.secrets.wakapi-env.path
     ];
 
     user = "${builtins.toString UID}";

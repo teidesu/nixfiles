@@ -1,11 +1,9 @@
-{ abs, pkgs, ... } @ inputs:
+{ pkgs, ... }:
 
-let 
-  trivial = import (abs "lib/trivial.nix") inputs;
-in {
+{
   services.nginx.virtualHosts."stupid.fish" = {
     forceSSL = true;
     useACMEHost = "stupid.fish";
-    root = trivial.storeDirectory ./assets;
+    root = pkgs.copyPathToStore ./assets;
   };
 }

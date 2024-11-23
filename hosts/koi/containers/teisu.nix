@@ -1,16 +1,9 @@
-{ abs, config, ... } @ inputs:
+{ config, ... } @ inputs:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1103;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "teisu-env";
-      owner = "teisu";
-    }])
-  ];
+  desu.secrets.teisu-env.owner = "teisu";
 
   users.users.teisu = {
     isNormalUser = true;
@@ -23,7 +16,7 @@ in {
       "/srv/teisu:/app/.runtime"
     ];
     environmentFiles = [
-      (secrets.file config "teisu-env")
+      config.desu.secrets.teisu-env.path
     ];
     user = builtins.toString UID;
   };

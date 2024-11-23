@@ -1,16 +1,9 @@
-{ abs, config, ... }:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1101;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "arumi-mumble-env";
-      owner = "mumble";
-    }])
-  ];
+  desu.secrets.arumi-mumble-env.owner = "mumble";
 
   users.users.mumble = {
     isNormalUser = true;
@@ -33,7 +26,7 @@ in {
       "64738:64738/udp"
     ];
     environmentFiles = [
-      (secrets.file config "arumi-mumble-env")
+      config.desu.secrets.arumi-mumble-env.path
     ];
     user = builtins.toString UID;
   };

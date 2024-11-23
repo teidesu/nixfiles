@@ -1,18 +1,9 @@
-{ abs, pkgs, config, ... }@inputs:
+{ pkgs, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-  trivial = import (abs "lib/trivial.nix") inputs;
-
   UID = 1113;
-  context = trivial.storeDirectory ./image;
+  context = pkgs.copyPathToStore ./image;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "siyuan-teidesu-proxy-env";
-      owner = "siyuan-teidesu";
-    }])
-  ];
   users.users.siyuan-teidesu = {
     isNormalUser = true;
     uid = UID;
@@ -40,6 +31,7 @@ in {
     "d /srv/siyuan-teidesu 0700 ${builtins.toString UID} ${builtins.toString UID} -"
   ];
 
+  desu.secrets.siyuan-teidesu-proxy-env.owner = "siyuan-teidesu";
   desu.openid-proxy.services.siyuan-teidesu = {
     clientId = "teidesu-siyuan";
     domain = "siyuan.tei.su";

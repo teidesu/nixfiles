@@ -1,16 +1,9 @@
-{ abs, config, ... }:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-
   UID = 1101;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "pcresub-bot-env";
-      owner = "pcre-sub-bot";
-    }])
-  ];
+  desu.secrets.pcresub-bot-env.owner = "pcre-sub-bot";
 
   users.groups.pcre-sub-bot = {};
   users.users.pcre-sub-bot = {
@@ -25,7 +18,7 @@ in {
       "/srv/pcre-sub-bot:/app/bot-data"
     ];
     environmentFiles = [
-      (secrets.file config "pcresub-bot-env")
+      config.desu.secrets.pcresub-bot-env.path
     ];
     user = builtins.toString UID;
   };

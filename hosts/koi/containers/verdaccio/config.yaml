@@ -3,7 +3,7 @@ storage: /verdaccio/storage
 
 web:
   enable: true
-  title: alina's personal registry
+  title: alina's personal registry meow
   primary_color: "#be15dc"
 
 uplinks:

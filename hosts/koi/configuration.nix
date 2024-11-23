@@ -8,6 +8,7 @@
   imports = [
     (abs "hosts/nixos-common.nix")
     (abs "users/teidesu/server.nix")
+    (abs "lib/desu")
     ./hardware-configuration.nix
 
     ./partials/fde.nix

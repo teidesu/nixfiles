@@ -1,19 +1,9 @@
-{ abs, pkgs, config, ... } @ inputs:
+{ config, ... }:
 
 let 
-  secrets = import (abs "lib/secrets.nix");
-  trivial = import (abs "lib/trivial.nix") inputs;
-
-  configDrv = trivial.storeDirectory ./config;
-
   UID = 1100;
 in {
-  imports = [
-    (secrets.declare [{
-      name = "verdaccio-htpasswd";
-      owner = "verdaccio";
-    }])
-  ];
+  desu.secrets.verdaccio-htpasswd.owner = "verdaccio";
 
   users.users.verdaccio = {
     isNormalUser = true;
@@ -23,8 +13,8 @@ in {
   virtualisation.oci-containers.containers.verdaccio = {
     image = "verdaccio/verdaccio:5.31@sha256:c77fec2127a1c3d17fc0795786f1e1bd88258e6d7af1835786ced4f7c7287da8";
     volumes = [
-      "${configDrv}:/verdaccio/conf"
-      "${secrets.file config "verdaccio-htpasswd"}:/verdaccio/htpasswd"
+      "${./config.yaml}:/verdaccio/conf/config.yaml"
+      "${config.desu.secrets.verdaccio-htpasswd.path}:/verdaccio/htpasswd"
       "/srv/verdaccio/storage:/verdaccio/storage"
       "/srv/verdaccio/plugins:/verdaccio/plugins"
     ];
