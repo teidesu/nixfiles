@@ -13,7 +13,7 @@ in {
   ];
 
   virtualisation.oci-containers.containers.vaultwarden = {
-    image = "vaultwarden/server:1.32.0";
+    image = "vaultwarden/server:1.32.5-alpine";
     volumes = [
       "/srv/vaultwarden:/data"
     ];
@@ -23,6 +23,7 @@ in {
       WEBSOCKET_ENABLED = "true";
       ROCKET_ADDRESS = "0.0.0.0";
       ROCKET_PORT = "80";
+      EXPERIMENTAL_CLIENT_FEATURE_FLAGS = "ssh-key-vault-item,ssh-agent,extension-refresh";
     };
     environmentFiles = [
       (secrets.file config "vaultwarden-env")

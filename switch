@@ -64,5 +64,6 @@ if [ "$(uname)" == "Darwin" -a "$remote" == 0 ]; then
         log_then_run nix --extra-experimental-features nix-command --extra-experimental-features flakes run nix-darwin -- switch --flake $flake $args $@
     fi
 else
+    export HOME=/root
     log_then_run sudo -E nixos-rebuild $cmd --flake $flake $args $@
 fi
