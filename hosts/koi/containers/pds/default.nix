@@ -14,7 +14,9 @@ in {
 
   virtualisation.oci-containers.containers.bluesky-pds = {
     image = "ghcr.io/bluesky-social/pds:sha-b595125a28368fa52d12d3b6ca265c1bea06977f";
+    cmd = [ "node" "--enable-source-maps" "/app/entrypoint.js" ];
     volumes = [
+      "${./entrypoint.js}:/app/entrypoint.js"
       "/srv/bluesky-pds/data:/pds"
       "/srv/bluesky-pds/blobstore:/blobstore"
     ];
