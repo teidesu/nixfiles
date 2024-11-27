@@ -64,5 +64,9 @@
       source = ./assets/linearmouse;
       recursive = true;
     };
+    home.file.".config/aerospace" = {
+      source = ./assets/aerospace;
+      recursive = true;
+    };
   };
 }

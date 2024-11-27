@@ -1,4 +1,4 @@
-tell application "Firefox Nightly"
+tell application "Firefox Developer Edition"
 	activate
 	tell application "System Events"
 		tell process "firefox"
