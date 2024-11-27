@@ -18,12 +18,14 @@ in {
     volumes = [
       "${./entrypoint.js}:/app/entrypoint.js"
       "/srv/bluesky-pds/data:/pds"
-      "/srv/bluesky-pds/blobstore:/blobstore"
     ];
     environment = {
       PDS_HOSTNAME = "pds.stupid.fish";
       PDS_DATA_DIRECTORY = "/pds";
-      PDS_BLOBSTORE_DISK_LOCATION = "/blobstore";
+      PDS_BLOBSTORE_S3_BUCKET = "bluesky-blobstore";
+      PDS_BLOBSTORE_S3_REGION = "auto";
+      PDS_BLOBSTORE_S3_FORCE_PATH_STYLE = "true";
+      PDS_BLOBSTORE_S3_UPLOAD_TIMEOUT_MS = "60000";
       PDS_DID_PLC_URL = "https://plc.directory";
       PDS_BSKY_APP_VIEW_URL = "https://api.bsky.app";
       PDS_BSKY_APP_VIEW_DID = "did:web:api.bsky.app";
@@ -35,6 +37,7 @@ in {
     };
     environmentFiles = [
       # PDS_JWT_SECRET, PDS_ADMIN_PASSWORD, PDS_PLC_ROTATION_KEY_K256_PRIVATE_KEY_HEX
+      # + s3 credentials
       config.desu.secrets.bluesky-pds-secrets.path
     ];
     user = builtins.toString UID;
