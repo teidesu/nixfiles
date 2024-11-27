@@ -1,0 +1,27 @@
+#TabsToolbar > *:not(.titlebar-buttonbox-container),
+#toolbar-menubar {
+    display: none;
+}
+
+#TabsToolbar {
+    min-height: 0!important;
+}
+
+.titlebar-buttonbox-container {
+    position: fixed;
+    top: 13px;
+    left: 8px;
+    display: block!important;
+}
+
+#urlbar-container {
+    margin-top: 0px;
+}
+
+#sidebar-header {
+    display: none;
+}
+
+#nav-bar-customization-target {
+    padding-left: 80px;
+}

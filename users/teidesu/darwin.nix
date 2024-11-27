@@ -68,5 +68,9 @@
       source = ./assets/aerospace;
       recursive = true;
     };
+    home.file."Library/Application Support/Firefox" = {
+      source = ./assets/firefox;
+      recursive = true;
+    };
   };
 }
