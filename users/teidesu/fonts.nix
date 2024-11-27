@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 {
-  fonts.fonts = [
+  fonts.packages = [
     (pkgs.fetchzip {
       name = "iosevka-nerd";
       url = "https://s3.tei.su/iosevka-nerd.tgz";

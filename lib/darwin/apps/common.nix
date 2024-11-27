@@ -8,17 +8,17 @@ rec {
   }: ''
     echo "Downloading" ${lib.escapeShellArg url}"..."
     ${var}=$(mktemp)
-    ${wget}/bin/wget ${lib.escapeShellArg url} ${params} -q --show-progress -O ${"$" + var}
+    ${wget}/bin/wget ${lib.escapeShellArg url} ${params} -q --show-progress -O "${"$" + var}"
   '';
 
   withMountedDmg = path: shell: ''
-    _result=$(hdiutil mount ${path} | tail -n1)
+    _result=$(hdiutil mount "${path}" | tail -n1)
     DMG_DEVICE=$(echo "$_result" | awk '{print $1}')
     DMG_MOUNTPOINT=$(echo "$_result" | perl -lane 'print "@F[2..$#F]"')
     unset _result
 
     function _unmount {
-      hdiutil unmount $DMG_DEVICE > /dev/null
+      hdiutil unmount "$DMG_DEVICE" > /dev/null
     }
     # trap _unmount ERR exit
     
@@ -47,7 +47,7 @@ rec {
     if [ ! -d "/Applications/"${lib.escapeShellArg (builtins.baseNameOf filename)} ]; then
       ${download { inherit url params; }}
       ${installAppFromDmg { dmg = "$DOWNLOADED_FILE"; inherit filename; }}
-      rm -rf $DOWNLOADED_FILE
+      rm -rf  "$DOWNLOADED_FILE"
     fi
   '';
 
@@ -62,7 +62,7 @@ rec {
       ${withMountedDmg "$DOWNLOADED_FILE" ''
         sudo /usr/sbin/installer -pkg "$DMG_MOUNTPOINT/"${lib.escapeShellArg filename} -target /
       ''}
-      rm -rf $DOWNLOADED_FILE
+      rm -rf "$DOWNLOADED_FILE"
     fi
   '';
 
@@ -78,11 +78,11 @@ rec {
     if [ ! -d "/Applications/"${lib.escapeShellArg (builtins.baseNameOf conditionFile)} ]; then
       ${download { inherit url params; }}
       tmpdir=$(mktemp -d)
-      unzip -q $DOWNLOADED_FILE -d $tmpdir
+      unzip -q "$DOWNLOADED_FILE" -d "$tmpdir"
 
       if [ ! -d "$tmpdir/"${lib.escapeShellArg filename} ]; then
         echo "Error: file not found:" ${lib.escapeShellArg filename}
-        rm -rf $DOWNLOADED_FILE $tmpdir
+        rm -rf "$DOWNLOADED_FILE" "$tmpdir"
         exit 1
       fi
 
@@ -92,7 +92,7 @@ rec {
       '' else ''
         mv "$tmpdir/"${lib.escapeShellArg filename} /Applications
       ''}
-      rm -rf $DOWNLOADED_FILE $tmpdir
+      rm -rf "$tmpdir" "$DOWNLOADED_FILE"
 
       ${afterInstall}
     fi
