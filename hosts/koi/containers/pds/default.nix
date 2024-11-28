@@ -31,7 +31,7 @@ in {
       PDS_BSKY_APP_VIEW_DID = "did:web:api.bsky.app";
       PDS_REPORT_SERVICE_URL = "https://mod.bsky.app";
       PDS_REPORT_SERVICE_DID = "did:plc:ar7c4by46qjdydhdevvrndac";
-      PDS_CRAWLERS = "https://bsky.network";
+      PDS_CRAWLERS = "https://bsky.network,https://relay.cerulea.blue";
       LOG_ENABLED = "true";
       PDS_INVITE_REQUIRED = "true";
     };
