@@ -6,8 +6,8 @@ BaseUrl = 'https://navi.stupid.fish'
 EnableSharing = true
 EnableTranscodingConfig = true
 
-UILoginBackgroundUrl = 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png' # idk why lol
-UIWelcomeMessage = 'mrrp meow!'
+UILoginBackgroundUrl = 'https://upload.wikimedia.org/wikipedia/en/7/73/Trollface.png' # idk why lol
+UIWelcomeMessage = 'meow!'
 
 # values sourced from secret env:
 # ND_LASTFM_APIKEY=

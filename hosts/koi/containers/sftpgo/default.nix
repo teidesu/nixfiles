@@ -13,6 +13,7 @@ in {
   users.users.sftpgo = {
     isNormalUser = true;
     uid = UID;
+    extraGroups = [ "geesefs" ];
   };
 
   virtualisation.oci-containers.containers.sftpgo = {
@@ -21,8 +22,12 @@ in {
       "/srv/sftpgo/data:/srv/sftpgo"
       "/srv/sftpgo/config:/var/lib/sftpgo"
       "/mnt/puffer:/mnt/puffer"
+      "/mnt/s3-desu-priv-encrypted:/mnt/s3-desu-priv-encrypted"
     ];
-    user = builtins.toString UID;
+    user = "${builtins.toString UID}:${builtins.toString UID}";
+    extraOptions = [
+      "--group-add=${builtins.toString config.users.groups.geesefs.gid}"
+    ];
     environment = {
       SFTPGO_SFTPD__BINDINGS__0__PORT = "22";
       SFTPGO_WEBDAVD__BINDINGS__0__PORT = "80";
@@ -46,6 +51,7 @@ in {
       "${builtins.toString WEBDAV_PORT}:80"
     ];
   };
+  systemd.services.docker-sftpgo.requires = [ "ecryptfs.service" ];
 
   systemd.tmpfiles.rules = [
     "d /srv/sftpgo/data 0700 ${builtins.toString UID} ${builtins.toString UID} -"

@@ -21,6 +21,7 @@
     ./services/phpfront.nix
     ./services/postgresql.nix
     ./services/landing
+    ./services/geesefs.nix
 
     ./containers/torrent.nix
     ./containers/vaultwarden.nix
@@ -28,7 +29,7 @@
     ./containers/verdaccio
     ./containers/sharkey
     ./containers/pds
-    # ./containers/navidrome
+    ./containers/navidrome
     ./containers/conduwuit
     ./containers/zond
     ./containers/kanidm

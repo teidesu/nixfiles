@@ -1,22 +1,30 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 let 
   UID = 1102;
+
+  feishin = pkgs.callPackage ./feishin.nix {};
+  feishinConfig = builtins.replaceStrings [ "\n" ] [ "" ] ''
+    window.SERVER_URL="https://navi.stupid.fish";
+    window.SERVER_NAME="stupid.fish";
+    window.SERVER_TYPE="navidrome";
+    window.SERVER_LOCK=true;
+  '';
 in {
   desu.secrets.navidrome-env.owner = "navidrome";
 
-  users.groups.navidrome = {};
   users.users.navidrome = {
     isNormalUser = true;
     uid = UID;
+    extraGroups = [ "geesefs" ];
   };
 
   virtualisation.oci-containers.containers.navidrome = {
-    image = "deluan/navidrome:0.52.5@sha256:b154aebe8b33bae82c500ad0a3eb743e31da54c3bfb4e7cc3054b9a919b685c7";
+    image = "deluan/navidrome:0.53.3";
     volumes = [
       "${./navidrome.toml}:/navidrome.toml"
-      "/mnt/puffer/Downloads/music:/music:ro"
-      "/mnt/puffer/navidrome:/data"
+      "/mnt/s3-desu-priv-encrypted/music:/music/s3:ro"
+      "/srv/navidrome:/data"
     ];
     environment = {
       ND_CONFIGFILE = "/navidrome.toml";
@@ -24,11 +32,15 @@ in {
     environmentFiles = [
       config.desu.secrets.navidrome-env.path
     ];
-    user = builtins.toString UID;
+    user = "${builtins.toString UID}:${builtins.toString UID}";
+    extraOptions = [
+      "--group-add=${builtins.toString config.users.groups.geesefs.gid}"
+    ];
   };
+  systemd.services.docker-navidrome.requires = [ "ecryptfs.service" ];
 
   systemd.tmpfiles.rules = [
-    "d /mnt/puffer/navidrome 0755 navidrome navidrome  -"
+    "d /srv/navidrome 0755 ${builtins.toString UID} ${builtins.toString UID} -"
   ];
 
   services.nginx.virtualHosts."navi.stupid.fish" = {
@@ -40,6 +52,20 @@ in {
 
       extraConfig = ''
         proxy_buffering off;
+      '';
+    };
+
+    locations."/feishin/" = {
+      extraConfig = ''
+        alias ${feishin}/;
+        try_files $uri $uri/ /index.html;
+      '';
+    };
+
+    locations."/feishin/settings.js" = {
+      extraConfig = ''
+        add_header 'Content-Type' 'application/javascript';
+        return 200 '${feishinConfig}';
       '';
     };
   };
