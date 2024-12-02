@@ -5,7 +5,7 @@
     trusted-users = [ "@wheel" ];
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
-      "https://cache.kamillaova.dev/?priority=1"
+      "https://nixos.tvix.store"
     ];
   };
   nixpkgs.config.allowUnfree = true;
