@@ -24,10 +24,10 @@
     ./services/geesefs.nix
 
     ./containers/torrent.nix
+    ./containers/soulseek
     ./containers/vaultwarden.nix
     ./containers/sftpgo
     ./containers/verdaccio
-    ./containers/sharkey
     ./containers/pds
     ./containers/navidrome
     ./containers/conduwuit
