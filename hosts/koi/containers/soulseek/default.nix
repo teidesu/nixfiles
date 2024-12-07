@@ -9,7 +9,7 @@ in {
     extraGroups = [ "geesefs" ];
   };
 
-  systemd.services.docker-slskd.requires = [ "ecryptfs.service" ];
+  systemd.services.docker-slskd.requires = [ "gocryptfs.service" ];
   virtualisation.oci-containers.containers.slskd = {
     image = "slskd/slskd:0.21.4.65534-9a68c184";
     volumes = [

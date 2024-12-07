@@ -3,7 +3,7 @@
 {
   imports = [
     (abs "services/geesefs.nix")
-    (abs "services/ecryptfs.nix")
+    (abs "services/gocryptfs.nix")
   ];
 
   desu.secrets.geesefs-credentials = {};
@@ -40,12 +40,12 @@
     mountPoint = "/mnt/s3-desu-priv";
   };
 
-  services.ecryptfs = {
+  services.gocryptfs = {
     enable = true;
-    cipherDir = "/mnt/s3-desu-priv/encrypted";
-    passphrasePath = config.desu.secrets.desu-priv-passphrase.path;
-    masterKeyPath = "/mnt/s3-desu-priv/encrypted.key";
+    cipherDir = "/mnt/s3-desu-priv/encrypted-go";
     mountPoint = "/mnt/s3-desu-priv-encrypted";
+    passwordFile = config.desu.secrets.desu-priv-passphrase.path;
+    extraOptions = [ "-allow_other" ];
   };
-  systemd.services.ecryptfs-setup.requires = [ "geesefs.service" ];
+  systemd.services.gocryptfs.requires = [ "geesefs.service" ];
 }

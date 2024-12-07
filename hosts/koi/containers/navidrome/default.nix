@@ -37,7 +37,7 @@ in {
       "--group-add=${builtins.toString config.users.groups.geesefs.gid}"
     ];
   };
-  systemd.services.docker-navidrome.requires = [ "ecryptfs.service" ];
+  systemd.services.docker-navidrome.requires = [ "gocryptfs.service" ];
 
   systemd.tmpfiles.rules = [
     "d /srv/navidrome 0755 ${builtins.toString UID} ${builtins.toString UID} -"

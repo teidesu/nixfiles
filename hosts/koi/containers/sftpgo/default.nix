@@ -51,7 +51,7 @@ in {
       "${builtins.toString WEBDAV_PORT}:80"
     ];
   };
-  systemd.services.docker-sftpgo.requires = [ "ecryptfs.service" ];
+  systemd.services.docker-sftpgo.requires = [ "gocryptfs.service" ];
 
   systemd.tmpfiles.rules = [
     "d /srv/sftpgo/data 0700 ${builtins.toString UID} ${builtins.toString UID} -"
