@@ -33,7 +33,6 @@
     cfg = config.services.geesefs;
 
     allArgs = cfg.args ++ [
-      "-f" # foreground
       cfg.bucket
       cfg.mountPoint
     ];
@@ -46,7 +45,10 @@
       serviceConfig = {
         User = "root";
         Group = "root";
+        Type = "forking";
+        GuessMainPID = true;
         ExecStart = "${cfg.package}/bin/geesefs ${builtins.concatStringsSep " " (map lib.escapeShellArg allArgs)}";
+        ExecStop = "fusermount -u ${lib.escapeShellArg cfg.mountPoint}";
         Restart = "on-failure";
       };
     };

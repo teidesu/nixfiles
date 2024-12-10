@@ -39,6 +39,7 @@
     bucket = "desu-priv";
     mountPoint = "/mnt/s3-desu-priv";
   };
+  systemd.services.geesefs.after = [ "coredns.service" ];
 
   services.gocryptfs = {
     enable = true;
