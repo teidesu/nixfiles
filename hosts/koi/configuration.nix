@@ -101,7 +101,7 @@
   }];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-  boot.kernelParams = [ "kernel.panic=10" ];
+  boot.kernelParams = [ "panic=5" "mitigations=off" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.desu-deploy = {
