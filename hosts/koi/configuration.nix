@@ -22,6 +22,7 @@
     ./services/postgresql.nix
     ./services/landing
     ./services/geesefs.nix
+    ./services/actions-runner
 
     ./containers/torrent.nix
     ./containers/soulseek
