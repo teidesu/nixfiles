@@ -17,7 +17,6 @@ in {
     cmd = [ "node" "--enable-source-maps" "/app/entrypoint.js" ];
     volumes = [
       "${./entrypoint.js}:/app/entrypoint.js"
-      "/srv/bluesky-pds/data:/pds"
     ];
     environment = {
       PDS_HOSTNAME = "pds.stupid.fish";
@@ -41,6 +40,9 @@ in {
       config.desu.secrets.bluesky-pds-secrets.path
     ];
     user = builtins.toString UID;
+    extraOptions = [
+      "--mount=type=bind,source=/srv/bluesky-pds/data,target=/pds"
+    ];
   };
 
   systemd.tmpfiles.rules = [

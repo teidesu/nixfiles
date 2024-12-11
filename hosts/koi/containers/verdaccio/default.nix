@@ -15,13 +15,16 @@ in {
     volumes = [
       "${./config.yaml}:/verdaccio/conf/config.yaml"
       "${config.desu.secrets.verdaccio-htpasswd.path}:/verdaccio/htpasswd"
-      "/srv/verdaccio/storage:/verdaccio/storage"
-      "/srv/verdaccio/plugins:/verdaccio/plugins"
     ];
     environment = {
       VERDACCIO_PUBLIC_URL = "https://npm.tei.su";
     };
     user = builtins.toString UID;
+
+    extraOptions = [
+      "--mount=type=bind,source=/srv/verdaccio/storage,target=/verdaccio/storage"
+      "--mount=type=bind,source=/srv/verdaccio/plugins,target=/verdaccio/plugins"
+    ];
   };
 
   systemd.tmpfiles.rules = [

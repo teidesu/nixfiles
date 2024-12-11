@@ -7,9 +7,6 @@ in {
 
   virtualisation.oci-containers.containers.vaultwarden = {
     image = "vaultwarden/server:1.32.5-alpine";
-    volumes = [
-      "/srv/vaultwarden:/data"
-    ];
     environment = {
       SIGNUPS_ALLOWED = "false";
       DOMAIN = "https://bw.tei.su";
@@ -22,6 +19,9 @@ in {
       config.desu.secrets.vaultwarden-env.path
     ];
     user = builtins.toString UID;
+    extraOptions = [
+      "--mount=type=bind,source=/srv/vaultwarden,target=/data"
+    ];
   };
 
   users.users.vaultwarden = {

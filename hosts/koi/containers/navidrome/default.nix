@@ -23,8 +23,6 @@ in {
     image = "deluan/navidrome:0.53.3";
     volumes = [
       "${./navidrome.toml}:/navidrome.toml"
-      "/mnt/s3-desu-priv-encrypted/music:/music/s3:ro"
-      "/srv/navidrome:/data"
     ];
     environment = {
       ND_CONFIGFILE = "/navidrome.toml";
@@ -35,6 +33,8 @@ in {
     user = "${builtins.toString UID}:${builtins.toString UID}";
     extraOptions = [
       "--group-add=${builtins.toString config.users.groups.geesefs.gid}"
+      "--mount=type=bind,source=/mnt/s3-desu-priv-encrypted/music,target=/music/s3,readonly"
+      "--mount=type=bind,source=/srv/navidrome,target=/data"
     ];
   };
   systemd.services.docker-navidrome.requires = [ "gocryptfs.service" ];

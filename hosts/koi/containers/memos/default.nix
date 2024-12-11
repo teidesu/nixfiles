@@ -17,9 +17,6 @@ in {
   systemd.services.docker-memos.after = [ "postgresql.service" ];
   virtualisation.oci-containers.containers.memos = {
     image = "neosmemo/memos:0.22.5";
-    volumes = [
-      "/srv/memos/data:/var/opt/memos"
-    ];
 
     environment = {
       MEMOS_DRIVER = "postgres";
@@ -27,6 +24,10 @@ in {
     };
     
     user = "${builtins.toString UID}";
+
+    extraOptions = [
+      "--mount=type=bind,source=/srv/memos/data,target=/var/opt/memos"
+    ];
   };
 
   systemd.tmpfiles.rules = [

@@ -14,13 +14,13 @@ in {
 
   virtualisation.oci-containers.containers.pcre-sub-bot = {
     image = "ghcr.io/teidesu/pcre-sub-bot:latest";
-    volumes = [
-      "/srv/pcre-sub-bot:/app/bot-data"
-    ];
     environmentFiles = [
       config.desu.secrets.pcresub-bot-env.path
     ];
     user = builtins.toString UID;
+    extraOptions = [
+      "--mount=type=bind,source=/srv/pcre-sub-bot,target=/app/bot-data"
+    ];
   };
 
   systemd.tmpfiles.rules = [

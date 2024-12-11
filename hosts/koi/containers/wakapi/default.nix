@@ -19,9 +19,6 @@ in {
   systemd.services.docker-wakapi.after = [ "postgresql.service" ];
   virtualisation.oci-containers.containers.wakapi = {
     image = "ghcr.io/muety/wakapi:2.12.2";
-    volumes = [
-      "/srv/wakapi:/data"
-    ];
 
     environment = {
       WAKAPI_DB_TYPE = "postgres";
@@ -50,6 +47,10 @@ in {
     ];
 
     user = "${builtins.toString UID}";
+
+    extraOptions = [
+      "--mount=type=bind,source=/srv/wakapi,target=/data"
+    ];
   };
 
   systemd.tmpfiles.rules = [

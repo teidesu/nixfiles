@@ -16,15 +16,15 @@ in {
   ];
   virtualisation.oci-containers.containers.siyuan-teidesu = {
     image = "local/siyuan";
-    volumes = [
-      "/srv/siyuan-teidesu:/data"
-    ];
     cmd = [ "--workspace=/data" ];
     environment = {
       # we manage auth via openid-proxy
       SIYUAN_ACCESS_AUTH_CODE_BYPASS = "true";
     };
     user = builtins.toString UID;
+    extraOptions = [
+      "--mount=type=bind,source=/srv/siyuan-teidesu,target=/data"
+    ];
   };
 
   systemd.tmpfiles.rules = [

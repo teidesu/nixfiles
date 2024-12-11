@@ -48,7 +48,7 @@
         Type = "forking";
         GuessMainPID = true;
         ExecStart = "${cfg.package}/bin/geesefs ${builtins.concatStringsSep " " (map lib.escapeShellArg allArgs)}";
-        ExecStop = "fusermount -u ${lib.escapeShellArg cfg.mountPoint}";
+        ExecStop = "fusermount -uz ${lib.escapeShellArg cfg.mountPoint}";
         Restart = "on-failure";
       };
     };

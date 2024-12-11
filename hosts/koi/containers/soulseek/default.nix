@@ -12,12 +12,6 @@ in {
   systemd.services.docker-slskd.requires = [ "gocryptfs.service" ];
   virtualisation.oci-containers.containers.slskd = {
     image = "slskd/slskd:0.21.4.65534-9a68c184";
-    volumes = [
-      "/srv/slskd:/app"
-      "/mnt/s3-desu-priv-encrypted/music:/mnt/music"
-      "/mnt/puffer/Downloads:/mnt/downloads"
-    ];
-
     ports = [
       "50300:50300"
     ];
@@ -34,6 +28,9 @@ in {
     user = "${builtins.toString UID}:${builtins.toString UID}";
     extraOptions = [
       "--group-add=${builtins.toString config.users.groups.geesefs.gid}"
+      "--mount=type=bind,source=/srv/slskd,target=/app"
+      "--mount=type=bind,source=/mnt/s3-desu-priv-encrypted/music,target=/mnt/music"
+      "--mount=type=bind,source=/mnt/puffer/Downloads,target=/mnt/downloads"
     ];
   };
 

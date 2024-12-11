@@ -12,13 +12,13 @@ in {
 
   virtualisation.oci-containers.containers.teisu = {
     image = "ghcr.io/teidesu/tei.su:latest";
-    volumes = [
-      "/srv/teisu:/app/.runtime"
-    ];
     environmentFiles = [
       config.desu.secrets.teisu-env.path
     ];
     user = builtins.toString UID;
+    extraOptions = [
+      "--mount=type=bind,source=/srv/teisu,target=/app/.runtime"
+    ];
   };
 
   systemd.tmpfiles.rules = [

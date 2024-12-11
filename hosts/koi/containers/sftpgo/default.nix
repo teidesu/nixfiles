@@ -18,15 +18,13 @@ in {
 
   virtualisation.oci-containers.containers.sftpgo = {
     image = "drakkan/sftpgo:v2.6.2";
-    volumes = [
-      "/srv/sftpgo/data:/srv/sftpgo"
-      "/srv/sftpgo/config:/var/lib/sftpgo"
-      "/mnt/puffer:/mnt/puffer"
-      "/mnt/s3-desu-priv-encrypted:/mnt/s3-desu-priv-encrypted"
-    ];
     user = "${builtins.toString UID}:${builtins.toString UID}";
     extraOptions = [
       "--group-add=${builtins.toString config.users.groups.geesefs.gid}"
+      "--mount=type=bind,source=/srv/sftpgo/data,target=/srv/sftpgo"
+      "--mount=type=bind,source=/srv/sftpgo/config,target=/var/lib/sftpgo"
+      "--mount=type=bind,source=/mnt/puffer,target=/mnt/puffer"
+      "--mount=type=bind,source=/mnt/s3-desu-priv-encrypted,target=/mnt/s3-desu-priv-encrypted"
     ];
     environment = {
       SFTPGO_SFTPD__BINDINGS__0__PORT = "22";

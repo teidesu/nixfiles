@@ -27,7 +27,6 @@ in {
       "${bridgeConfig}:/config-template.yaml:ro"
       "${pkgs.pkgsStatic.jq}/bin/jq:/bin/jq"
       "${entrypoint}:/entrypoint.sh"
-      "/srv/mautrix-telegram:/data"
     ];
     environment = {
       MAUTRIX_DIRECT_STARTUP = "1";
@@ -37,6 +36,9 @@ in {
       config.desu.secrets.mautrix-tg-env.path
     ];
     user = builtins.toString UID;
+    extraOptions = [
+      "--mount=type=bind,source=/srv/mautrix-telegram,target=/data"
+    ];
   };
 
   systemd.tmpfiles.rules = [

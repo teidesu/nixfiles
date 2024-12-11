@@ -19,7 +19,6 @@ in {
     image = "ghcr.io/girlbossceo/conduwuit:main-032b199129f8648a77bde285f755a78e9ec349a7";
     volumes = [
       "${./config.toml}:/conduwuit.toml"
-      "/srv/conduwuit:/data"
     ];
     environment = {
       CONDUWUIT_CONFIG = "/conduwuit.toml";
@@ -28,6 +27,9 @@ in {
       config.desu.secrets.conduwuit-env.path
     ];
     user = builtins.toString UID;
+    extraOptions = [
+      "--mount=type=bind,source=/srv/conduwuit,target=/data"
+    ];
   };
 
   systemd.tmpfiles.rules = [
