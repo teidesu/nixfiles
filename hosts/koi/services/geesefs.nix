@@ -34,6 +34,7 @@
       "--max-flushers" "32"
       "--max-parallel-parts" "32"
       "--part-sizes" "25"
+      "--large-read-cutoff" "40960"
       "--enable-patch"
     ];
     bucket = "desu-priv";
