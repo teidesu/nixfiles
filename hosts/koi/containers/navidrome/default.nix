@@ -9,6 +9,11 @@ let
     window.SERVER_NAME="stupid.fish";
     window.SERVER_TYPE="navidrome";
     window.SERVER_LOCK=true;
+    const style = document.createElement("style");
+    style.innerHTML = `
+      #sidebar-queue .mantine-Stack-root:has([class^=TitleWrapper]) { display: none; }
+    `;
+    document.head.appendChild(style);
   '';
 in {
   desu.secrets.navidrome-env.owner = "navidrome";
