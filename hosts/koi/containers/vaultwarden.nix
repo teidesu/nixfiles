@@ -9,7 +9,7 @@ in {
     image = "vaultwarden/server:1.32.5-alpine";
     environment = {
       SIGNUPS_ALLOWED = "false";
-      DOMAIN = "https://bw.tei.su";
+      DOMAIN = "https://bw.stupid.fish";
       WEBSOCKET_ENABLED = "true";
       ROCKET_ADDRESS = "0.0.0.0";
       ROCKET_PORT = "80";
@@ -36,6 +36,16 @@ in {
   services.nginx.virtualHosts."bw.tei.su" = {
     forceSSL = true;
     useACMEHost = "tei.su";
+
+    locations."/" = {
+      proxyPass = "http://vaultwarden.docker$request_uri";
+      proxyWebsockets = true;
+    };
+  };
+
+  services.nginx.virtualHosts."bw.stupid.fish" = {
+    forceSSL = true;
+    useACMEHost = "stupid.fish";
 
     locations."/" = {
       proxyPass = "http://vaultwarden.docker$request_uri";
