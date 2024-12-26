@@ -24,7 +24,7 @@ in
 
   desu.secrets.hass-proxy-env = {};
   desu.openid-proxy.services.hass = {
-    clientId = "hass";
+    clientId = "299748893099360262";
     domain = "hass.stupid.fish";
     upstream = "http://10.42.0.3:8123";
     envSecret = "hass-proxy-env";

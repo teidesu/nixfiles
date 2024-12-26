@@ -33,7 +33,7 @@ in {
 
   desu.secrets.siyuan-teidesu-proxy-env.owner = "siyuan-teidesu";
   desu.openid-proxy.services.siyuan-teidesu = {
-    clientId = "teidesu-siyuan";
+    clientId = "299749237216837638";
     domain = "siyuan.tei.su";
     upstream = "http://siyuan-teidesu.docker:6806";
     envSecret = "siyuan-teidesu-proxy-env";

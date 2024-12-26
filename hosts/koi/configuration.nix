@@ -33,13 +33,15 @@
     ./containers/navidrome
     ./containers/conduwuit
     ./containers/zond
-    ./containers/kanidm
+    ./containers/zitadel
     ./containers/siyuan
     ./containers/memos
     ./containers/wakapi
+    ./containers/outline
     ./containers/teisu.nix
     ./containers/bots/pcre-sub-bot.nix
     ./containers/bots/channel-logger-bot.nix
+    ./containers/bots/bsky-crossposter
     ./vms/hass.nix
     ./vms/bnuuy.nix
     # ./vms/windows.nix
@@ -80,6 +82,8 @@
       "8.8.8.8"
       "8.8.4.4"
     ];
+
+    firewall.logRefusedConnections = false;
   };
 
   virtualisation.libvirtd = {
@@ -102,7 +106,7 @@
   }];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-  boot.kernelParams = [ "panic=5" "mitigations=off" ];
+  boot.kernelParams = [ "panic=5" "panic_on_oops=1" "mitigations=off" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   services.desu-deploy = {

@@ -76,7 +76,7 @@ in
   ];
 
   desu.openid-proxy.services.torrent = {
-    clientId = "torrent";
+    clientId = "299749111337385990";
     domain = "torrent.stupid.fish";
     upstream = "http://torrent.containers";
     envSecret = "torrent-proxy-env";

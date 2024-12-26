@@ -61,7 +61,7 @@ in {
             "--client-id=${service.clientId}"
             "--upstream=${service.upstream}"
             "--redirect-url=https://${service.domain}/oauth2/callback"
-            "--oidc-issuer-url=https://id.stupid.fish/oauth2/openid/${service.clientId}"
+            "--oidc-issuer-url=https://id.stupid.fish"
           ] ++ service.extra;
         };
       }) (builtins.attrNames cfg.services)

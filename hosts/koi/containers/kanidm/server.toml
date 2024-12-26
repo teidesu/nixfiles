@@ -1,9 +1,0 @@
-bindaddress = "0.0.0.0:8443"
-adminbindpath = "/tmp/kanidm.sock"
-trust_x_forward_for = true
-db_path = "/data/db/kanidm.db"
-tls_chain = "/data/chain.pem"
-tls_key = "/data/key.pem"
-
-domain = "id.stupid.fish"
-origin = "https://id.stupid.fish"
