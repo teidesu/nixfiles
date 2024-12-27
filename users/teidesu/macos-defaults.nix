@@ -59,6 +59,10 @@
       ShowRemovableMediaOnDesktop = false;
       ShowMountedServersOnDesktop = false;
     };
+    "com.apple.desktopservices" = {
+      DSDontWriteUSBStores = true;
+      DSDontWriteNetworkStores = true;
+    };
 
     "com.apple.BluetoothAudioAgent" = {
       # from https://github.com/joeyhoer/starter/blob/master/system/bluetooth.sh
