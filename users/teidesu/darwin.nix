@@ -48,8 +48,8 @@
       ]))
     ];
 
-    home.file.".config/rio" = {
-      source = ./assets/rio;
+    home.file.".config/ghostty" = {
+      source = ./assets/ghostty;
       recursive = true;
     };
     home.file.".config/karabiner" = {
