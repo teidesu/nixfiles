@@ -23,6 +23,7 @@
     ./services/landing
     ./services/geesefs.nix
     ./services/actions-runner
+    ./services/autorestic
 
     ./containers/torrent.nix
     ./containers/soulseek

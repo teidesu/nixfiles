@@ -46,7 +46,7 @@
 
   config = let 
     cfg = config.services.gocryptfs;
-  in {
+  in lib.mkIf cfg.enable {
     systemd.services.${cfg.serviceName} = {
       description = "${cfg.serviceName} daemon";
       wantedBy = [ "multi-user.target" ];

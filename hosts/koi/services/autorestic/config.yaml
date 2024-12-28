@@ -1,0 +1,87 @@
+version: 2
+
+global:
+  forget:
+    keep-daily: 30
+    keep-weekly: 52
+
+backends:
+  rclone:
+    type: rclone
+    path: backups:backups/koi
+    requireKey: true
+
+# todo: move this to `options.desu.autorestic.locations`
+locations:
+  conduwuit:
+    # while conduwuit does support online backups, it's not really useful
+    # since it needs to be invoked manually from the management room via "!admin server backup-database"
+    from: /srv/conduwuit/db
+    to: rclone
+    hooks:
+      prevalidate:
+        - systemctl stop docker-conduwuit
+      after:
+        - systemctl start docker-conduwuit
+    cron: '0 6 * * *'
+    options:
+      backup:
+        exclude:
+          - /srv/conduwuit/db/media
+  # media is safe to backup online, so we do this as a separate location to avoid too much downtime
+  conduwuit-media:
+    from: /srv/conduwuit/db/media
+    to: rclone
+    cron: '0 6 * * *'
+  mautrix-telegram:
+    from: /srv/mautrix-telegram/
+    to: rclone
+    cron: '0 6 * * *'
+  postgres:
+    from: /tmp/pg-backup/
+    to: rclone
+    cron: '0 6,18 * * *'
+    hooks:
+      prevalidate:
+        - mkdir -p /tmp/pg-backup
+        - chown postgres:postgres /tmp/pg-backup
+        - sudo -u postgres pg_dumpall -f /tmp/pg-backup/backup.sql
+      after:
+        - rm -rf /tmp/pg-backup
+  navidrome-db:
+    from: /srv/navidrome/navidrome.db.bak
+    to: rclone
+    hooks:
+      prevalidate:
+        - sqlite3 /srv/navidrome/navidrome.db ".backup /srv/navidrome/navidrome.db.bak"
+      after:
+        - rm /srv/navidrome/navidrome.db.bak
+    cron: '0 6 * * *'
+  bluesky-pds:
+    from: /srv/bluesky-pds/data/
+    to: rclone
+    cron: '0 6 * * *'
+  sftpgo:
+    from: /srv/sftpgo/
+    to: rclone
+    cron: '0 6 * * *'
+  siyuan-teidesu:
+    from: /srv/siyuan-teidesu
+    to: rclone
+    cron: '0 6 * * *'
+  slskd:
+    from: /srv/slskd/
+    to: rclone
+    cron: '0 6 * * *'
+  verdaccio:
+    from: /srv/verdaccio/
+    to: rclone
+    cron: '0 6 * * *'
+  teisu:
+    from: /srv/teisu/
+    to: rclone
+    cron: '0 6 * * *'
+  vaultwarden:
+    from: /srv/vaultwarden/
+    to: rclone
+    cron: '0 6 * * *'

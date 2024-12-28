@@ -36,7 +36,7 @@
       cfg.bucket
       cfg.mountPoint
     ];
-  in {
+  in lib.mkIf cfg.enable {
     systemd.services.${cfg.serviceName} = {
       description = "${cfg.serviceName} Daemon";
       after = [ "network.target" ];
@@ -48,7 +48,7 @@
         Type = "forking";
         GuessMainPID = true;
         ExecStart = "${cfg.package}/bin/geesefs ${builtins.concatStringsSep " " (map lib.escapeShellArg allArgs)}";
-        ExecStop = "fusermount -uz ${lib.escapeShellArg cfg.mountPoint}";
+        ExecStop = "${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint}";
         Restart = "on-failure";
       };
     };

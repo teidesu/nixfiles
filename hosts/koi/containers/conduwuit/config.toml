@@ -9,7 +9,9 @@ sentry_traces_sample_rate = 0.01
 sentry_attach_stacktrace = false
 
 
-database_path = "/data"
+database_path = "/data/db"
+database_backup_path = "/data/backup"
+database_backups_to_keep = 1
 database_backend = "rocksdb"
 
 port = 6167

@@ -19,6 +19,7 @@ note to self on what needs to be installed on the host manually:
 - `/etc/vms/bnuuy.img` - qcow2 image of an ubuntu cloud image (e.g. `https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img`)
 - `/etc/secureboot/keys` - secure boot keys, generated with `sudo nix-shell -p sbctl --run "sbctl create-keys"`
 - to enroll fde onto tpm: `sudo systemd-cryptenroll /dev/nvme0n1p2 --tpm2-device=auto --tpm2-pcrs=0+2+7`
+- rclone config (for backups): `sudo nix-shell -p rclone --run "rclone config"` – you need to set up a remote called `backups`, which will be used as the destination for all backups
 
 ### teidesu-osx
 `cp /var/run/current-system/Library/Fonts/* /Library/Fonts` - copy nix-managed fonts to system fonts (waiting for [this PR](https://github.com/LnL7/nix-darwin/pull/754))

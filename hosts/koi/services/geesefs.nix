@@ -3,6 +3,7 @@
 {
   imports = [
     (abs "services/geesefs.nix")
+    (abs "services/rclone-mount.nix")
     (abs "services/gocryptfs.nix")
   ];
 
@@ -35,11 +36,11 @@
       "--max-parallel-parts" "32"
       "--part-sizes" "25"
       "--large-read-cutoff" "40960"
-      "--enable-patch"
     ];
     bucket = "desu-priv";
     mountPoint = "/mnt/s3-desu-priv";
   };
+
   systemd.services.geesefs.after = [ "coredns.service" ];
 
   services.gocryptfs = {
