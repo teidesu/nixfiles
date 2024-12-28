@@ -5,6 +5,7 @@ let
 in {
   imports = [
     ./proxy.nix
+    ./telegram-oauth.nix
   ];
 
   users.users.zitadel = {
