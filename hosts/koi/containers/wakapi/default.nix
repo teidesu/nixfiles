@@ -4,6 +4,7 @@ let
   UID = 1115;
 in {
   desu.secrets.wakapi-env.owner = "wakapi";
+  desu.secrets.wakapi-proxy-env.owner = "wakapi";
 
   users.users.wakapi = {
     isNormalUser = true;
@@ -33,13 +34,15 @@ in {
       WAKAPI_LISTEN_IPV4 = "0.0.0.0";
       WAKAPI_LISTEN_IPV6 = "-";
       WAKAPI_ALLOW_SIGNUP = "false";
-      WAKAPI_DISABLE_FRONTPAGE = "false";
-      WAKAPI_MAIL_SENDER = "waka.stupid.fish <alina@tei.su>";
-      WAKAPI_MAIL_SMTP_HOST = "smtp.mail.me.com";
-      WAKAPI_MAIL_SMTP_PORT = "587";
-      WAKAPI_MAIL_SMTP_USERNAME = "teidesu@icloud.com";
-      WAKAPI_MAIL_SMTP_TLS = "false";
+      WAKAPI_DISABLE_FRONTPAGE = "true";
+      WAKAPI_MAIL_ENABLED = "true";
+      WAKAPI_MAIL_SENDER = "waka.stupid.fish <noreply@stupid.fish>";
       WAKAPI_AVATAR_URL_TEMPLATE = "https://t.me/i/userpic/320/{username}.jpg";
+      WAKAPI_SUPPORT_CONTACT = "alina@tei.su";
+
+      WAKAPI_TRUSTED_HEADER_AUTH = "true";
+      WAKAPI_TRUSTED_HEADER_AUTH_KEY = "X-Forwarded-Preferred-Username";
+      WAKAPI_TRUST_REVERSE_PROXY_IPS = "172.17.0.0/16";
     };
 
     environmentFiles = [
@@ -47,22 +50,26 @@ in {
     ];
 
     user = "${builtins.toString UID}";
-
-    extraOptions = [
-      "--mount=type=bind,source=/srv/wakapi,target=/data"
-    ];
   };
 
-  systemd.tmpfiles.rules = [
-    "d /srv/wakapi 0700 ${builtins.toString UID} ${builtins.toString UID} -"
-  ];
+  desu.openid-proxy.services.wakapi = {
+    clientId = "300318162728058886";
+    domain = "waka.stupid.fish";
+    upstream = "http://wakapi.docker:3000";
+    envSecret = "wakapi-proxy-env";
+    uid = UID;
+    extra = [
+      "--skip-auth-route=POST=^/((v1/)?users/[^/]+/)?heartbeat(s|s\.bulk)?$"
+      "--skip-auth-route=GET=^/api/health$"
+    ];
+  };
 
   services.nginx.virtualHosts."waka.stupid.fish" = {
     forceSSL = true;
     useACMEHost = "stupid.fish";
 
     locations."/" = {
-      proxyPass = "http://wakapi.docker:3000$request_uri";
+      proxyPass = "http://wakapi-oidc.docker$request_uri";
       proxyWebsockets = true;
     };
   };
