@@ -60,7 +60,7 @@ in {
     uid = UID;
     extra = [
       "--skip-auth-route=POST=^/((v1/)?users/[^/]+/)?heartbeat(s|s\.bulk)?$"
-      "--skip-auth-route=GET=^/api/health$"
+      "--skip-auth-route=^/api/"
     ];
   };
 
